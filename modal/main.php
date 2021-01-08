@@ -56,4 +56,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="footer"><?php include 'cmp/footer.php';?></div><?php require('cmp/import.php');?>
+	<div id="footer">
+	<?php include 'cmp/footer.php';?>
+	<?php require('cmp/import.php');?>
+</div>

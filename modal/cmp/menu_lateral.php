@@ -26,7 +26,7 @@ case "ong":
  }
 ?>
 <ul id="menu" class="collapse" style="font-size:15px">
- <li class="<?php echo $ative_menu_principal; ?>"><a href="inicio.php"> <i class="icon-home"></i>
+ <li class="<?php echo $ative_menu_principal; ?>"><a href="main.php"> <i class="icon-home"></i>
 Home page</a></li>
 <?php
 if($access==0){

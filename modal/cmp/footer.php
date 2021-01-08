@@ -1,6 +1,6 @@
 <div style="font-size:17px;color:#fff;font-family: Times New Roman, Times, serif;">
 
-	<p style="color:black"><b> © <?php echo date('Y');  ?>  All rights reserved.</b></p>
+	<p style="color:black"><b>SMS Sending System © <?php echo date('Y');  ?>  All rights reserved.</b></p>
 	<br>
 
 
