@@ -8,12 +8,12 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Desejas sair do sistema?</div>
+            <div class="modal-body">Logout?</div>
             <hr />
             <div id="exit_state" class="d-flex justify-content-center" role="alert"></div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Não</button>
-                <a class="btn btn-danger" href="javascript:exit()">Sim</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
+                <a class="btn btn-danger" href="javascript:exit()">Yes</a>
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Alterar minhas informações</h5>
+                <h5 class="modal-title">Update my informations</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
                 </button>
@@ -44,8 +44,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                <a class="btn btn-success" href="javascript:changeMyInfo()">Alterar</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success" href="javascript:changeMyInfo()">Update</a>
             </div>
         </div>
     </div>

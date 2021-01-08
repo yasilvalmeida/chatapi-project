@@ -29,7 +29,7 @@
         <p class="login-box-msg">User Authentication</p>
         <form class="user">
           <div class="input-group mb-4">
-            <input id="email_login" type="text" class="form-control" placeholder="User Email">
+            <input id="email_login" type="text" class="form-control" placeholder="Email">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="input-group mb-4">
-            <input id="password_login" type="password" class="form-control" placeholder="User Password">
+            <input id="password_login" type="password" class="form-control" placeholder="Password">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
@@ -53,9 +53,10 @@
               <center>
                 <table>
                   <tr>
-                    <td><a href="javascript:login()" class="btn btn-success btn-user btn-block" tabindex="3"><b>Authentication</b></a></td>
+
+                    <td><a href="javascript:recoverShow()" class="btn btn-warning btn-block" tabindex="3"><b>Recover password</b></a></td>
                     <td>&nbsp;&nbsp;</td>
-                    <td><a href="javascript:recoverShow()" class="btn btn-success btn-user btn-block" tabindex="3"><b>Recover password</b></a></td>
+                    <td><a href="javascript:login()" class="btn btn-success btn-block" tabindex="3"><b>Authentication</b></a></td>
                   </tr>
                 </table>
               </center>
@@ -73,7 +74,7 @@
         <p class="login-box-msg">Account Recovery</p>
         <form class="user">
           <div class="input-group mb-4">
-            <input id="username_login" type="text" class="form-control" placeholder=" Recovery Email ">
+            <input id="username_login" type="text" class="form-control" placeholder="Email">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -91,9 +92,9 @@
             <center>
               <table>
                 <tr>
-                  <td><a href="#" class="btn btn-success btn-user btn-block" tabindex="3"><b>Recovery</b></a></td>
+                  <td><a href="javascript:loginShow()" class="btn btn-warning btn-block" tabindex="3"><b>Go to login</b></a></td>
                   <td>&nbsp;&nbsp;</td>
-                  <td><a href="javascript:loginShow()" class="btn btn-success btn-user btn-block" tabindex="3"><b>Authentication</b></a></td>
+                  <td><a href="#" class="btn btn-success btn-block" tabindex="3"><b>Recovery</b></a></td>
                 </tr>
               </table>
             </center>

@@ -14,7 +14,7 @@
         public function __construct()
         {
 
-            $this->hostname = "ccm.ybytesi.com";
+            $this->hostname = "ybytesi.com";
             $this->database = "chatapi_db";
             $this->username = "chatapi_sa";
             $this->password = "Ch4t4pI*2021&";
@@ -29,7 +29,7 @@
             try {
                 $this->connection = new PDO("mysql:host=$this->hostname;dbname=$this->database", $this->username, $this->password, array(PDO::MYSQL_ATTR_FOUND_ROWS => true));
             } catch (PDOException $e) {
-                echo "Connexão falhada: ".$e->getMessage();
+                echo "Connection fail: ".$e->getMessage();
             }
         }
         // Get MySQL PDO Connection

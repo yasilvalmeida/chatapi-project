@@ -12,7 +12,7 @@ $(() => {
     function checkLength(tips, o, n, min, max) {
         if (o.val().length > max || o.val().length < min) {
             o.addClass("alert-danger");
-            updateTips(tips, "A longetude de " + n + " tem de estar entre " + min + " e " + max + ".")
+            updateTips(tips, "The length of " + n + " must be between " + min + " and " + max + ".")
             return false;
         } else {
             return true;
@@ -34,10 +34,10 @@ $(() => {
         if (code == 13) { //Enter keycode
             var tips = $("#login_state");
             if (email_login.val() == "") {
-                updateTips(tips, "Por favor preencha o email do utilizador");
+                updateTips(tips, "Fill the email");
                 email_login.focus();
             } else if (password_login.val() == "") {
-                updateTips(tips, "Por favor preencha a palavra passe");
+                updateTips(tips, "Fill the password");
                 password_login.focus();
             } else {
                 loginAsync();
@@ -50,10 +50,10 @@ $(() => {
         if (code == 13) { //Enter keycode
             var tips = $("#login_state");
             if (email_login.val() == "") {
-                updateTips(tips, "Porfavor preencha o nome do utilisador");
+                updateTips(tips, "Fill the email");
                 email_login.focus();
             } else if (password_login.val() == "") {
-                updateTips(tips, "Por favor preencha a palavra pass");
+                updateTips(tips, "Fill the password");
                 password_login.focus();
             } else {
                 loginAsync();
@@ -75,7 +75,7 @@ function updateTips(tips, text) {
 function checkLength(tips, o, n, min, max) {
     if (o.val().length > max || o.val().length < min) {
         o.addClass("alert-danger");
-        updateTips(tips, "A longetude de " + n + " tem de estar entre " + min + " e " + max + ".")
+        updateTips(tips, "The length of " + n + " must be between " + min + " and " + max + ".")
         return false;
     } else {
         return true;
@@ -97,10 +97,10 @@ function login() {
     var tips = $("#login_state");
 
     if (email_login.val() == "") {
-        updateTips(tips, "Por favor preencha o email do utilizador");
+        updateTips(tips, "Fill the email");
         email_login.focus();
     } else if (password_login.val() == "") {
-        updateTips(tips, "Por favor preencha a palavra passe");
+        updateTips(tips, "Fill the password");
         password_login.focus();
     } else {
         // alert(username_login.val())
@@ -124,9 +124,10 @@ function loginAsync() {
                 try {
                     var r = JSON.parse(data),
                         result = parseInt(r.result);
-                    // alert(result)
+                    alert(result)
                     if (result != NaN && result == 1) {
-                        tips.html("Login com sucesso!");
+
+                        tips.html("Login successful!");
                         window.location.href = "modal/main.php";
                     } else {
                         updateTips(tips, r.result);

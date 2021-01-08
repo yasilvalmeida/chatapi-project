@@ -7,8 +7,7 @@
     {
         /* User Actions Begin */
         /* Do the login */
-        public function logIn()
-        {
+        public function logIn() {
             try {
                 /* Check if for the empty or null username and password parameters */
                 if (isset($_POST["email"]) && isset($_POST["password"])) {
@@ -51,16 +50,16 @@
                         // data[] is a associative array that return json
                         $data[] = array('result' => '1');
                     } else {
-                        $data[] = array('result' => 'Credenciais incorrectas, por favor verifique o seu nome de utilizador ou a sua palavra passe!');
+                        $data[] = array('result' => 'Wrong credentials, please check your email or password!');
                     }
                 } else {
                     // Check for missing parameters in POST data
                     if (!isset($_POST["email"]) && !isset($_POST["password"])) {
-                        $data[] = array('result' => 'Todos os paramêtros em falta para a autenticação do utilizador!');
+                        $data[] = array('result' => 'Missing all parameters!');
                     } elseif (!isset($_POST["email"])) {
-                        $data[] = array('result' => 'Paramêtro email de utilizador em falta!!');
+                        $data[] = array('result' => 'Missing email!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro palavra passe em falta!!');
+                        $data[] = array('result' => 'Missing password!');
                     }
                 }
                 return $data;
@@ -69,8 +68,7 @@
             }
         }
         /* Do the recover */
-        public function recoverPassword()
-        {
+        public function recoverPassword() {
             try {
                 /* Check if for the empty or null email parameters */
                 if (isset($_POST["email"])) {
@@ -118,11 +116,11 @@
 
                         $mail->AddReplyTo($email, $username);
 
-                        $mail->Subject    = "inic.gov.st | Envio de palavra passe";
+                        $mail->Subject    = "Domain | Recover password";
 
-                        $body = "<html><head></head><body><p>Ol&aacute; $username,</p><p>Enviamos-lhe a sua palavra-passe, <b>$password</b>.</p><br/><br/><p>Atentamente,</p><p>Webmaster inic.gov.st</p></body></html>";
+                        $body = "<html><head></head><body><p>Hi; $username,</p><p>We're sending you your password, <b>$password</b>.</p><br/><br/><p>Regards,</p><p>Webmaster domain</p></body></html>";
                         
-                        $mail->AddEmbeddedImage("../img/logoInic.png", "my-attach", "../img/logoInic.png");
+                        /* $mail->AddEmbeddedImage("../img/logoInic.png", "my-attach", "../img/logoInic.png"); */
                         $body = $body.'<img alt="INIC Logotipo" src="cid:my-attach" />';
                         
                         $mail->MsgHTML($body);
@@ -137,11 +135,11 @@
                             $data[] = array('result' => '1');
                         }
                     } else {
-                        $data[] = array('result' => 'Correio electrónico não encontrado!');
+                        $data[] = array('result' => 'Email not found!');
                     }
                 } else {
                     // Check for missing parameters in POST data
-                    $data[] = array('result' => 'Paramêtro correio electrónico em falta!!');
+                    $data[] = array('result' => 'Missing email!');
                 }
                 return $data;
             } catch (PDOException $e) {
@@ -149,8 +147,7 @@
             }
         }
         /* Do the logout */
-        public function logOut()
-        {
+        public function logOut() {
             try {
                 // Check for open session
                 if (isset($_SESSION['views'])) {
@@ -163,7 +160,7 @@
                     // data[] is a associative array that return json
                     $data[] = array('result' => '1');
                 } else {
-                    $data[] = array('result' => 'Não existe a tal sessão disponível!');
+                    $data[] = array('result' => 'Session not found!');
                 }
                 return $data;
             } catch (PDOException $e) {
@@ -171,8 +168,7 @@
             }
         }
         /* Change Logged User Information */
-        public function changeLoggedUserInfo()
-        {
+        public function changeLoggedUserInfo() {
             try {
                 /* Check if for the empty or null id, username and password parameters */
                 if (isset($_POST["id"]) && isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["email"])) {
@@ -202,7 +198,7 @@
                         // Create a SQL query to update the existent user with a new username and password for this passed id
                         $query = "
                                 update tuser
-                                set username = :username, password = :password, email = :email 
+                                set username = :username, password = :password
                                 where id = :id
                                 ";
                         // Prepare the query
@@ -224,26 +220,26 @@
                                 // data[] is a associative array that return json
                                 $data[] = array('result' => '1');
                             } else {
-                                $data[] = array('result' => 'Não existe a tal sessão disponível!');
+                                $data[] = array('result' => 'Session not found!');
                             }
                         } else {
-                            $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                            $data[] = array('result' => 'No database operation!');
                         }
                     } else {
-                        $data[] = array('result' => 'Id do utilizador inválido!');
+                        $data[] = array('result' => 'Invalid user Id!');
                     }
                 } else {
                     // Check for missing parameters
                     if (!isset($_POST["id"]) && !isset($_POST["username"]) && !isset($_POST["password"]) && !isset($_POST["email"])) {
-                        $data[] = array('result' => 'Todos os paramêtros em falta para a alteração dos dados do utilizador autenticado!');
+                        $data[] = array('result' => 'Missing all parameters!');
                     } elseif (!isset($_POST["id"])) {
-                        $data[] = array('result' => 'Paramêtro id em falta!!');
+                        $data[] = array('result' => 'Missing Id!');
                     } elseif (!isset($_POST["username"])) {
-                        $data[] = array('result' => 'Paramêtro nome de utilizador em falta!!');
+                        $data[] = array('result' => 'Missing username!');
                     } elseif (!isset($_POST["password"])) {
-                        $data[] = array('result' => 'Paramêtro palavra passe em falta!!');
+                        $data[] = array('result' => 'Missing password!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro correio electrónico em falta!!');
+                        $data[] = array('result' => 'Missing email!');
                     }
                 }
                 return $data;
@@ -295,8 +291,7 @@
             }
         }
         /* Insert new user */
-        public function insertUser()
-        {
+        public function insertUser() {
             try {
                 /* Check if for the empty or null username, password and access parameters */
                 if (isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["email"]) && isset($_POST["access"])) {
@@ -327,7 +322,7 @@
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
                     // Check if any affected row
                     if ($row) {
-                        $data[] = array('result' => 'This record already exists!');
+                        $data[] = array('result' => 'No operations performed on the database!');
                     } else {
                         // Create a SQL query to insert an new user with a new username, password and access    insert tuser(username, password, access) values(:username, :password, :access);
                         $query = "
@@ -341,19 +336,21 @@
                         if ($statement->rowCount()) {
                             $data[] = array('result' => '1');
                         } else {
-                            $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                            $data[] = array('result' => 'No database operation!');
                         }
                     }
                 } else {
                     // Check for missing parameters
                     if (!isset($_POST["username"]) && !isset($_POST["password"]) && !isset($_POST["access"]) && !isset($_POST["email"])) {
-                        $data[] = array('result' => 'Todos os paramêtros em falta para adição de um novo utilizador!');
+                        $data[] = array('result' => 'Missing all parameters!');
                     } elseif (!isset($_POST["username"])) {
-                        $data[] = array('result' => 'Paramêtro nome de utilizador em falta!');
+                        $data[] = array('result' => 'Missing username!');
                     } elseif (!isset($_POST["password"])) {
-                        $data[] = array('result' => 'Paramêtro palavra passe em falta!');
+                        $data[] = array('result' => 'Missing password!');
+                    } elseif (!isset($_POST["email"])) {
+                            $data[] = array('result' => 'Missing email!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro acesso em falta!');
+                        $data[] = array('result' => 'Missing access!');
                     }
                 }
                 return $data;
@@ -362,8 +359,7 @@
             }
         }
         /* Update user */
-        public function updateUser()
-        {
+        public function updateUser() {
             try {
                 /* Check if for the empty or null id, username, password and access parameters */
                 if (isset($_POST["id"]) && isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["access"]) && isset($_POST["email"])) {
@@ -421,13 +417,15 @@
                 } else {
                     // Check for missing parameters
                     if (!isset($_POST["id"]) && !isset($_POST["username"]) && !isset($_POST["password"]) && !isset($_POST["access"]) && !isset($_POST["email"])) {
-                        $data[] = array('result' => 'Todos os paramêtros em falta para actualização do utilizador!');
+                        $data[] = array('result' => 'Missing all parameters!');
                     } elseif (!isset($_POST["id"])) {
                         $data[] = array('result' => 'Missing id parameter!');
                     } elseif (!isset($_POST["username"])) {
-                        $data[] = array('result' => 'Missing User parameter!');
+                        $data[] = array('result' => 'Missing username parameter!');
                     } elseif (!isset($_POST["password"])) {
-                        $data[] = array('result' => 'Missing passwor parameter!');
+                        $data[] = array('result' => 'Missing password parameter!');
+                    } elseif (!isset($_POST["email"])) {
+                        $data[] = array('result' => 'Missing email parameter!');
                     } else {
                         $data[] = array('result' => 'Missing access parameter!');
                     }
@@ -438,8 +436,7 @@
             }
         }
         /* Remove user */
-        public function removeUser()
-        {
+        public function removeUser() {
             try {
                 /* Check if for the empty or null id parameters */
                 if (isset($_POST["id"])) {
@@ -461,11 +458,11 @@
                     if ($statement->rowCount()) {
                         $data[] = array('result' => '1');
                     } else {
-                        $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                        $data[] = array('result' => 'No operations performed on the database!');
                     }
                 } else {
                     // Check for missing parameters
-                    $data[] = array('result' => 'Paramêtro id em falta!!');
+                    $data[] = array('result' => 'Missing id!');
                 }
                 return $data;
             } catch (PDOException $e) {

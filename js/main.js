@@ -16,7 +16,7 @@ $(() => {
 $(function() {
     $.fx.speeds._default = 900;
     //Sair Dialogo
-    $("#sairDialogo").dialog({
+    $("#exitModal").dialog({
         autoOpen: false,
         resizable: false,
         show: "clip",
@@ -24,16 +24,16 @@ $(function() {
         modal: true,
         closeOnEscape: true,
         buttons: {
-            "Não": function() {
+            "No": function() {
                 $(this).dialog("close");
             },
-            "Sim": function() {
+            "Yes": function() {
                 exit();
             }
         },
         close: function() {}
     });
-    $("#sair").tooltip({
+    $("#exit").tooltip({
         show: {
             effect: "blind",
             delay: 50
@@ -55,7 +55,7 @@ function checkLength(tips, o, n, min, max) {
         o.addClass("alert-danger");
         updateTips(
             tips,
-            "A longitude " + n + " deve estar entre " + min + " e " + max + "."
+            "The length of " + n + " must be between " + min + " and " + max + "."
         );
         return false;
     } else {
@@ -87,16 +87,16 @@ function changeMyInfo() {
         tips = $("#change_my_info_state");
     tips.removeClass("alert-danger").addClass("alert-light");
     if (username_changed.val() == "") {
-        updateTips(tips, "Por favor preencha o nome do utilisador.");
+        updateTips(tips, "Fill the username!");
         username_changed.focus();
     } else if (password_changed.val() == "") {
-        updateTips(tips, "Por favor preencha a palavra pass");
+        updateTips(tips, "Fill the password");
         password_changed.focus();
     } else if (username_changed.val() == password_changed.val()) {
-        updateTips(tips, "O nome do utilisador e a palavra passe não podem ser iguais");
+        updateTips(tips, "The username and the password match");
         password_changed.focus();
     } else if (password_changed.val().includes(username_changed.val())) {
-        updateTips(tips, "A palavra passe não pode conter o nome do utilisador");
+        updateTips(tips, "The password contains the username");
         password_changed.focus();
     } else {
         bValid =
@@ -107,7 +107,7 @@ function changeMyInfo() {
                 tips,
                 username_changed,
                 /[QWERTYUIOPASDFGHJKLZXCVBNM]([0-9qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM])+$/i,
-                "O nome do utilisador dever começa com uma letra e terminar com uma letra ou numero"
+                "The username must begin with a letter and end with a number"
             );
         bValid =
             bValid && checkLength(tips, password_changed, "password", 6, 20);
@@ -117,7 +117,7 @@ function changeMyInfo() {
                 tips,
                 password_changed,
                 /[0-9]/,
-                "A palavra passe deve conter pelo menos um numero"
+                "The password must contain a number"
             );
         bValid =
             bValid &&
@@ -125,7 +125,7 @@ function changeMyInfo() {
                 tips,
                 password_changed,
                 /[qwertyuiopasdfghjklzxcvbnm]/,
-                "A palavra passe deve conter pelo menos uma letra minuscula"
+                "The password must contain a lowercase letter"
             );
         bValid =
             bValid &&
@@ -133,7 +133,7 @@ function changeMyInfo() {
                 tips,
                 password_changed,
                 /[QWERTYUIOPASDFGHJKLZXCVBNM]/,
-                "A palavra passe deve conter pelo menos uma letra maiscula"
+                "The password must contain a uppercase letter"
             );
         bValid =
             bValid &&
@@ -141,7 +141,7 @@ function changeMyInfo() {
                 tips,
                 password_changed,
                 /[@£€#$%&*+-?!]/,
-                "A senha deve consistir em pelo menos 1 caractere especial, nomeadamente @, £, €, #, $, %, &, *, +, -, ? or !."
+                "The password must contain a special chracter, like @, £, €, #, $, %, &, *, +, -, ? or !."
             );
         bValid = bValid && checkLength(tips, email_changed, "email", 6, 50);
         bValid =
@@ -149,7 +149,7 @@ function changeMyInfo() {
             checkRegexp(tips,
                 email_changed,
                 /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
-                "exemplo. alguem@dominio.com"
+                "example. name@domain.com"
             );
         if (bValid) {
             changeMyInfoAsync();
@@ -172,7 +172,7 @@ function changeMyInfoAsync() {
                 try {
                     var r = JSON.parse(data);
                     if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                        tips.html("Alterado com sucesso");
+                        tips.html("Updated successful");
                         location.reload();
                     } else {
                         updateTips(tips, r.result);
@@ -196,7 +196,7 @@ function exit() {
                 var r = JSON.parse(data);
                 //   alert(r.result)
                 if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                    tips.html("Sair com sucesso, Adeus!");
+                    tips.html("Logout successful!");
                     location.reload();
                 } else {
                     updateTips(tips, r.result);
@@ -212,5 +212,5 @@ function exit() {
 
 function sair() {
 
-    $("#sairDialogo").dialog("open");
+    $("#exitModal").dialog("open");
 }

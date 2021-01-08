@@ -292,7 +292,7 @@
         // No action to perform
         else
         {
-            $data = array('result' => 'Nenhuma acção realizada ou requer sessão aberta!');
+            $data = array('result' => 'No action found or not found session!');
         }
     }
     // Convert data[] to json
