@@ -1,0 +1,134 @@
+
+body {
+    margin:0px auto;	
+    text-align: center;
+    padding: 0px auto;
+}
+
+#main {
+    width: 88%;
+    background: linear-gradient(rgba(255, 255, 255, 1),rgba(255, 255, 255, 0.9)), url(../..//images/logo.png);
+    background-repeat: no-repeat; 
+    margin:0px auto; 
+    background-size: 550px; background-position: center;
+    z-index: 2;
+}
+#footer{
+    width: 100%;
+    margin: 0px auto;
+    height: 30px;
+    text-align: center;
+    clear: both;
+     display: block;
+}
+#footer .footer_1{
+    height: 100%;
+    padding: 5px;
+    width: 88%;
+    margin: 0px auto;
+    clear: both;
+    display: block;
+}
+/* jQuery Countdown styles 1.6.1. */
+
+#counter {
+   display: none;
+}
+#counter-default {
+    margin: 20px auto;
+}
+#counter-default .inner {
+    font-size: 12px;
+    text-align: center;
+    border: none;
+    background-color: rgba(0,0, 0, 0.42);
+    margin: 15px 0;
+}
+#counter-default .timer-number {
+    font-size: 36px;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+#counter-default  .timer-text {
+    padding: 5px; 
+    background-color:rgba(255,255,255,0.9);
+    box-shadow: 0px 4px 10px 0px silver;
+}
+a:hover > .timer-text {
+    color: rgba(223,33,16,1);
+}
+.inst{
+   font-size:13px;
+}
+.title {
+    margin:30px;
+    text-align:center;
+}
+.well {
+    background-color: #202020;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+}
+legend {
+    border-color: #333333;
+}
+.page-header {
+    border-bottom: 1px solid #333333;
+}
+
+.contact {
+    padding-top:20px;
+    text-align:center;
+    font-size:40px;
+    font-weight:800;
+
+}
+
+.jsn-desktop-on-mobile #jsn-menu.jsn-menu-sticky, .jsn-desktop-on-mobile #jsn-pos-topbar,
+.jsn-desktop-on-mobile #jsn-header-inner, .jsn-desktop-on-mobile #jsn-body-inner,
+.jsn-desktop-on-mobile #jsn-content-bottom-inner, .jsn-desktop-on-mobile #jsn-footer-inner1,
+.jsn-desktop-on-mobile #jsn-pos-content-bottom-before, .jsn-desktop-on-mobile #jsn-footer-inner {
+  	width: 100%;
+}
+
+#footer{
+    width: 100%;
+    margin: 0px auto;
+    height: auto;
+    text-align: center;
+    clear: both;
+    bottom: 0;
+    display: block;
+box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.3);
+background-color: #fff;
+
+}
+#footer .footer_1{
+    height: 100%;
+    padding: 5px;
+    width: 88%;
+    margin: 0px auto;
+    clear: both;
+    display: block;
+    font: 12px "Times new Roman";
+    background-color: #fff;
+}
+
+@media (min-width: 1200px) {
+ #footer {
+    max-width: 100%;
+    margin: 0px auto;
+    bottom: 0;
+    float: left;
+    position: absolute;
+box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.3);
+ background-color: #fff;
+  }
+}
+
+
+@media (max-width: 767px) {
+    body {padding: 0px auto; margin: 0px auto;}
+}
+
