@@ -4,7 +4,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Adicionar novo utilizador</h5>
+                <h5 class="modal-title">Add new user</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -15,24 +15,24 @@
                         <input id="email_add" type="email" class="form-control form-control-user" placeholder="Email"/>
                     </div>
                     <div class="form-group">
-                        <input id="username_add" type="text" class="form-control form-control-user" placeholder="Utilizador"/>
+                        <input id="username_add" type="text" class="form-control form-control-user" placeholder="Username"/>
                     </div>
                     <div class="form-group">
-                        <input id="password_add" type="password" class="form-control form-control-user" placeholder="Palavra Passe"/>
+                        <input id="password_add" type="password" class="form-control form-control-user" placeholder="Password"/>
                     </div>
                     <div class="form-group">
-                        <input id="access_add" type="number" min="0" max="1" class="form-control form-control-user" placeholder="Acesso"/>
+                        <input id="access_add" type="number" min="0" max="1" class="form-control form-control-user" placeholder="Access"/>
                     </div>
                     <hr />
-                    <p><b>Acesso 0:</b> Acesso Geral</p>
-                    <p><b>Acesso 1:</b> Acesso restrito sem gestão de utilizadores</p>
+                    <p><b>Access 0:</b> Admin</p>
+                    <p><b>Access 1:</b> Restricted access without user management</p>
                     <hr />
-                    <div id="insert_state" class="" role="alert">
+                    <div id="insert_state" class="d-flex justify-content-center" role="alert">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
                 <a class="btn btn-success" href="javascript:insert()">Save</a>
             </div>
         </div>
@@ -43,7 +43,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Alterar utilizador</h5>
+                <h5 class="modal-title">Update user</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -66,20 +66,20 @@
                         <input id="password_upd" type="password" class="form-control form-control-user" />
                     </div>
                     <div class="form-group">
-                        <label>Acesso </label>
+                        <label>Access </label>
                         <input id="access_upd" type="number" min="0" max="1" class="form-control form-control-user" />
                     </div>
                     <hr />
                     <p><b>Access 0:</b> Admin</p>
-                    <p><b>Access 1:</b> User</p>
+                    <p><b>Access 1:</b> Restricted access without user management</p>
                     <hr />
                     <div id="update_state"  class="d-flex justify-content-center" role="alert">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
-                <a class="btn btn-success" href="javascript:updateAsync()">Alterar</a>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success" href="javascript:updateAsync()">Update</a>
             </div>
         </div>
     </div>
@@ -89,15 +89,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Eliminar utilizador</h5>
+                <h5 class="modal-title">Delete user</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div id="delModalBody" class="modal-body"></div>
             <div class="modal-footer">
-                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
-                <a class="btn btn-success" href="javascript:removeAsync()">Eliminar</a>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success" href="javascript:removeAsync()">Delete</a>
             </div>
         </div>
     </div>

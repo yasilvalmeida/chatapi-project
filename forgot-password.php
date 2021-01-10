@@ -16,23 +16,31 @@
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-flex">
-                                <div class="flex-grow-1 bg-password-image" style="background-image: url(&quot;assets/img/logo.png&quot;);"></div>
-                            </div>
+                              <center>
+                                <img src="assets/img/logo.png" alt="Girl in a jacket" width="340" height="300" style="position:relative;margin: 10px;top:19px;">
+                              </center>
+                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h4 class="text-dark mb-2">Forgot Your Password?</h4>
+                                        <h4 class="text-dark mb-2">Forgot Your Password ?</h4>
                                         <p class="mb-4">We get it, stuff happens. Just enter your email address below and we'll send you a link to reset your password!</p>
                                     </div>
                                     <form class="user">
-                                        <div class="form-group">
-                                            <input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email">
+                                        <div class="input-group mb-4">
+                                            <input class="form-control form-control" type="email" id="email" aria-describedby="emailHelp" placeholder=" Email Address..." name="email">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                     <span class="fas fa-envelope"></span>
+                                                 </div>
+                                            </div>
                                         </div>
-                                        <button class="btn btn-primary btn-block text-white btn-user"
-                                            type="submit">Reset Password</button>
+                                        <button class="btn btn-primary btn-block text-white"type="submit">Reset Password
+                                        </button>
                                     </form>
                                     <div class="text-center">
-                                        <a class="small" href="index.php">Already have an account? Login!</a>
+                                        </br>
+                                        <a class="small" href="index.php"><b>Already have an account ? Login!</b></a>
                                     </div>
                                 </div>
                             </div>

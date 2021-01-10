@@ -5,14 +5,16 @@
         private $url;
         private $token;
         private $user_id;
+        private $username;
         /* 
         This constructor create a new user object
         */
         function __construct(array $data) {
-            $this->id      = $data['id'];
-            $this->url     = $data['url'];
-            $this->token   = $data['token'];
-            $this->user_id = $data['user_id'];
+            $this->id       = $data['id'];
+            $this->url      = $data['url'];
+            $this->token    = $data['token'];
+            $this->user_id  = $data['user_id'];
+            $this->username = $data['username'];
         }
         // Get Id
         function getId() {
@@ -26,9 +28,13 @@
         function getToken() {
             return $this->token;
         }
-        // Get Token
+        // Get UserId
         function getUserId() {
             return $this->user_id;
+        }
+        // Get Token
+        function getUsername() {
+            return $this->username;
         }
         // Convert object to JSON
         public function jsonSerialize() {

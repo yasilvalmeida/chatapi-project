@@ -106,7 +106,7 @@
         // No action to perform
         else
         {
-            $data = array('result' => 'Nenhuma acção realizada!');
+            $data = array('result' => 'No action taken!');
         }
     }
     else
@@ -132,7 +132,7 @@
         // No action to perform
         else
         {
-            $data = array('result' => 'Nenhuma acção realizada ou requer sessão aberta!');
+            $data = array('result' => 'No action taken or requires an open session!');
         }
     }
     // Convert data[] to json

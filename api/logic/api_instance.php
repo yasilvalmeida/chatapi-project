@@ -9,7 +9,11 @@
         public function fetchAllInstance() {
             try {
                 // Select all users
-                $query = "select * from tb_instance";
+                $query = "
+                        select *
+                        from tb_instance ti
+                        join tb_user tu on tu.id = ti.user_id
+                        order by tu.username";
                 // Create object to connect to MySQL using PDO
                 $mysqlPDO = new MySQLPDO();
                 // Prepare the query
@@ -26,7 +30,7 @@
                     $tmp_data[] = array(
                         $instance->getURL(),
                         $instance->getToken(),
-                        $instance->getUserId(),
+                        $instance->getUsername(),
                         "<div class='span12' style='text-align:center'><a href='javascript:update(".json_encode($instance).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
                         "<div class='span12' style='text-align:center'><a href='javascript:remove(".$instance->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
                     );
@@ -43,7 +47,7 @@
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message" . $e->getMessage());
             }
         }
         /* Insert new instance */
@@ -77,7 +81,7 @@
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
                     // Check if any affected row
                     if ($row) {
-                        $data[] = array('result' => 'Este registo já existe!');
+                        $data[] = array('result' => 'This record already exists!');
                     } else {
                         // Create a SQL query to insert an new instance with a new token, password and access
                         $query = "
@@ -91,7 +95,7 @@
                         if ($statement->rowCount()) {
                             $data[] = array('result' => '1');
                         } else {
-                            $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                            $data[] = array('result' => 'No operations performed on the database!');
                         }
                     }
                 } else {
@@ -101,14 +105,14 @@
                     } elseif (!isset($_POST["url"])) {
                         $data[] = array('result' => 'Missing url parameter!');
                     } elseif (!isset($_POST["token"])) {
-                        $data[] = array('result' => 'Paramêtro nome de utilizador em falta!');
+                        $data[] = array('result' => 'Missing username parameter!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro user_id em falta!');
+                        $data[] = array('result' => 'Missing user_id parameter!');
                     }
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message" . $e->getMessage());
             }
         }
         /* Update instance */
@@ -162,26 +166,26 @@
                         if ($statement->rowCount()) {
                             $data[] = array('result' => '1');
                         } else {
-                            $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                            $data[] = array('result' => 'No operations performed on the database!');
                         }
                     }
                 } else {
                     // Check for missing parameters
                     if (!isset($_POST["id"]) && !isset($_POST["url"]) && !isset($_POST["token"]) && !isset($_POST["user_id"])) {
-                        $data[] = array('result' => 'Todos os paramêtros em falta para actualização do utilizador!');
+                        $data[] = array('result' => 'All missing parameters to update the instance!');
                     } elseif (!isset($_POST["id"])) {
-                        $data[] = array('result' => 'Paramêtro id em falta!');
+                        $data[] = array('result' => 'Missing id parameter!');
                     } elseif (!isset($_POST["url"])) {
-                        $data[] = array('result' => 'Paramêtro url em falta!');
+                        $data[] = array('result' => 'Missing url parameter!');
                     } elseif (!isset($_POST["token"])) {
-                        $data[] = array('result' => 'Paramêtro nome de utilizador em falta!');
+                        $data[] = array('result' => 'Missing username parameter!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro user_id em falta!');
+                        $data[] = array('result' => 'Missing user_id parameter!');
                     }
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message" . $e->getMessage());
             }
         }
         /* Remove instance */
@@ -208,15 +212,15 @@
                     if ($statement->rowCount()) {
                         $data[] = array('result' => '1');
                     } else {
-                        $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                        $data[] = array('result' => 'No operations performed on the database!');
                     }
                 } else {
                     // Check for missing parameters
-                    $data[] = array('result' => 'Paramêtro id em falta!!');
+                    $data[] = array('result' => 'Missing id parameter !!');
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message" . $e->getMessage());
             }
         }
         /* User Actions End */

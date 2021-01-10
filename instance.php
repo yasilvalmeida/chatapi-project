@@ -43,12 +43,12 @@
                                                     <tr>
                                                         <th>URL</th>
                                                         <th>Token</th>
-                                                        <th>UserID</th>
+                                                        <th>Username</th>
                                                         <th style="text-align: center;">
-                                                            <i class='fas fa-edit'> Modificar</i>
+                                                            <i class='fas fa-edit'> Update</i>
                                                         </th>
                                                         <th style="text-align: center;">
-                                                            <i class="far fa-trash-alt"> Eliminar</i>
+                                                            <i class="far fa-trash-alt"> Delete</i>
                                                         </th>
                                                     </tr>
                                                 </thead>

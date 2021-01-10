@@ -155,7 +155,7 @@
                         </a> -->
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
-                            <i class="fas fa-sign-out-alt mr-2"></i> Terminar a sessão
+                            <i class="fas fa-sign-out-alt mr-2"></i>Log out!
                         </a>
                     </div>
                 </div>

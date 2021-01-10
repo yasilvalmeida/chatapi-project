@@ -48,21 +48,21 @@
                         // data[] is a associative array that return json
                         $data[] = array('result' => '1');
                     } else {
-                        $data[] = array('result' => 'Aryson fique tento e deixe Castilho, por favor verifique o seu nome de utilizador ou a sua palavra passe!');
+                        $data[] = array('result' => 'Please check your username or password!');
                     }
                 } else {
                     // Check for missing parameters in POST data
                     if (!isset($_POST["email"]) && !isset($_POST["password"])) {
-                        $data[] = array('result' => 'Todos os paramêtros em falta para a autenticação do utilizador!');
+                        $data[] = array('result' => 'All parameters are missing for user authentication!');
                     } elseif (!isset($_POST["email"])) {
-                        $data[] = array('result' => 'Paramêtro email em falta!!');
+                        $data[] = array('result' => 'Missing email parameter!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro palavra passe em falta!!');
+                        $data[] = array('result' => 'Missing password parameter!!');
                     }
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* Do the recover */
@@ -115,7 +115,7 @@
 
                         $mail->AddReplyTo($email, $username);
 
-                        $mail->Subject    = "Envio de palavra passe";
+                        $mail->Subject    = "Password sending";
 
                         $body = "<html><head></head><body><p>Ol&aacute; $username,</p><p>Enviamos-lhe a sua palavra-passe, <b>$password</b>.</p><br/><br/><p>Atentamente,</p><p>Webmaster inic.gov.st</p></body></html>";
                         
@@ -134,15 +134,15 @@
                             $data[] = array('result' => '1');
                         }
                     } else {
-                        $data[] = array('result' => 'Correio electrónico não encontrado!');
+                        $data[] = array('result' => 'Email not found!');
                     }
                 } else {
                     // Check for missing parameters in POST data
-                    $data[] = array('result' => 'Paramêtro correio electrónico em falta!!');
+                    $data[] = array('result' => 'Missing email parameter !!');
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* Do the logout */
@@ -160,11 +160,11 @@
                     // data[] is a associative array that return json
                     $data[] = array('result' => '1');
                 } else {
-                    $data[] = array('result' => 'Não existe a tal sessão disponível!');
+                    $data[] = array('result' => 'There is no such session available!');
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* Change Logged User Information */
@@ -220,31 +220,31 @@
                                 // data[] is a associative array that return json
                                 $data[] = array('result' => '1');
                             } else {
-                                $data[] = array('result' => 'Não existe a tal sessão disponível!');
+                                $data[] = array('result' => 'There is no such session available!');
                             }
                         } else {
-                            $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                            $data[] = array('result' => 'No operations performed on the database!');
                         }
                     } else {
-                        $data[] = array('result' => 'Id do utilizador inválido!');
+                        $data[] = array('result' => 'Nvalid user id!');
                     }
                 } else {
                     // Check for missing parameters
                     if (!isset($_POST["id"]) && !isset($_POST["username"]) && !isset($_POST["password"]) && !isset($_POST["email"])) {
-                        $data[] = array('result' => 'Todos os paramêtros em falta para a alteração dos dados do utilizador autenticado!');
+                        $data[] = array('result' => 'All missing parameters for changing the authenticated user data!');
                     } elseif (!isset($_POST["id"])) {
-                        $data[] = array('result' => 'Paramêtro id em falta!!');
+                        $data[] = array('result' => 'Missing id parameter !!');
                     } elseif (!isset($_POST["username"])) {
-                        $data[] = array('result' => 'Paramêtro nome de utilizador em falta!!');
+                        $data[] = array('result' => 'Missing username parameter!!');
                     } elseif (!isset($_POST["password"])) {
-                        $data[] = array('result' => 'Paramêtro palavra passe em falta!!');
+                        $data[] = array('result' => 'Missing password parameter!!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro correio electrónico em falta!!');
+                        $data[] = array('result' => 'Missing email parameter !!');
                     }
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* Retrieve all users on the database */
@@ -287,7 +287,7 @@
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* Retrieve all users on the database to select */
@@ -323,7 +323,7 @@
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* Insert new user */
@@ -358,7 +358,7 @@
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
                     // Check if any affected row
                     if ($row) {
-                        $data[] = array('result' => 'Este registo já existe!');
+                        $data[] = array('result' => 'This record already exists!');
                     } else {
                         // Create a SQL query to insert an new user with a new username, password and access
                         $query = "
@@ -372,7 +372,7 @@
                         if ($statement->rowCount()) {
                             $data[] = array('result' => '1');
                         } else {
-                            $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                            $data[] = array('result' => 'No operations performed on the database!');
                         }
                     }
                 } else {
@@ -382,16 +382,16 @@
                     } elseif (!isset($_POST["email"])) {
                         $data[] = array('result' => 'Missing email parameter!');
                     } elseif (!isset($_POST["username"])) {
-                        $data[] = array('result' => 'Paramêtro nome de utilizador em falta!');
+                        $data[] = array('result' => 'Missing username parameter!');
                     } elseif (!isset($_POST["password"])) {
-                        $data[] = array('result' => 'Paramêtro palavra passe em falta!');
+                        $data[] = array('result' => 'Missing password parameter!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro acesso em falta!');
+                        $data[] = array('result' => 'Missing access parameter!');
                     }
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* Update user */
@@ -447,7 +447,7 @@
                         if ($statement->rowCount()) {
                             $data[] = array('result' => '1');
                         } else {
-                            $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                            $data[] = array('result' => 'No operations performed on the database!');
                         }
                     }
                 } else {
@@ -457,18 +457,18 @@
                     } elseif (!isset($_POST["id"])) {
                         $data[] = array('result' => 'Paramêtro id em falta!');
                     } elseif (!isset($_POST["email"])) {
-                        $data[] = array('result' => 'Paramêtro email em falta!');
+                        $data[] = array('result' => 'Missing email parameter!');
                     } elseif (!isset($_POST["username"])) {
-                        $data[] = array('result' => 'Paramêtro nome de utilizador em falta!');
+                        $data[] = array('result' => 'Missing username parameter!');
                     } elseif (!isset($_POST["password"])) {
-                        $data[] = array('result' => 'Paramêtro palavra passe em falta!');
+                        $data[] = array('result' => 'Missing password parameter!');
                     } else {
-                        $data[] = array('result' => 'Paramêtro acesso em falta!');
+                        $data[] = array('result' => 'Missing access parameter!');
                     }
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* Remove user */
@@ -496,15 +496,15 @@
                     if ($statement->rowCount()) {
                         $data[] = array('result' => '1');
                     } else {
-                        $data[] = array('result' => 'Nenhuma operação realizada a base de dados!');
+                        $data[] = array('result' => 'No operations performed on the database!');
                     }
                 } else {
                     // Check for missing parameters
-                    $data[] = array('result' => 'Paramêtro id em falta!!');
+                    $data[] = array('result' => 'Missing id parameter !!');
                 }
                 return $data;
             } catch (PDOException $e) {
-                die("Mensagem de erro: " . $e->getMessage());
+                die("Error message: " . $e->getMessage());
             }
         }
         /* User Actions End */

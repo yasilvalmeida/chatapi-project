@@ -38,15 +38,15 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Email</th>
-                                                        <th>Password</th>
                                                         <th>Username</th>
+                                                        <th>Password</th>
                                                         <th>Access</th>
                                                         <th>Active</th>
                                                         <th style="text-align: center;">
-                                                            <i class='fas fa-edit'> Modificar</i>
+                                                            <i class='fas fa-edit'> Update</i>
                                                         </th>
                                                         <th style="text-align: center;">
-                                                            <i class="far fa-trash-alt"> Eliminar</i>
+                                                            <i class="far fa-trash-alt"> Delete</i>
                                                         </th>
                                                     </tr>
                                                 </thead>

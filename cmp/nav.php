@@ -2,7 +2,7 @@
     <div class="container-fluid d-flex flex-column p-0">
         <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="main.php">
             <div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-laugh-wink"></i>
+            <i class="fas fa-paper-plane"></i>
             </div>
             <div class="sidebar-brand-text mx-3">
                 <span>SMS System</span>
