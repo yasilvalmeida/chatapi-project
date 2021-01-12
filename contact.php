@@ -5,7 +5,7 @@
 <html>
 
     <head>
-        <title>Instance - SMS Sending System</title>
+        <title>Contact - SMS Sending System</title>
         <?php
             require("cmp/head.php");
         ?>
@@ -23,7 +23,7 @@
                         ?>
                         <div class="container-fluid">
                             <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                                <h3 class="text-dark mb-0">Instances</h3>
+                                <h3 class="text-dark mb-0">Contact</h3>
                             </div>
                             <div class="row">
                                 <div class="col-12">
@@ -31,7 +31,7 @@
                                         <div class="card-body">
                                             <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addModal">
                                                 <i class="fa fa-save fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                New
+                                                New 
                                             </a>
                                             <!-- <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addModal">
                                                 <i class="fa fa-save fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -41,9 +41,10 @@
                                             <table id="dataTable" class="table table-striped table-bordered table-hover display">
                                                 <thead>
                                                     <tr>
-                                                       <th>Id</th>
-                                                        <th>URL</th>
-                                                        <th>Token</th>
+                                                    <th>Id</th>
+                                                        <th>Number</th>
+                                                        <th>Name</th>
+                                                        <th>Url</th>
                                                         <th>Username</th>
                                                         <th style="text-align: center;">
                                                             <i class='fas fa-edit'> Update</i>
@@ -72,10 +73,10 @@
             </a>
         </div>
         <?php
-            require("cmp/modal/instance.php");
+            require("cmp/modal/contact.php");
             require("cmp/script.php");
         ?>
-        <script src="assets/js/instance.js"></script>
+        <script src="assets/js/contact.js"></script>
     </body>
 
 </html>

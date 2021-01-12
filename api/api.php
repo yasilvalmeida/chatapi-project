@@ -2,6 +2,7 @@
     // Import the neeeded class
     require_once('logic/api_user.php');
     require_once('logic/api_instance.php');
+    require_once('logic/api_contact.php');
 
     // Create session
     session_start();
@@ -11,9 +12,10 @@
     {
         // Create a API for User CRUD
         $userAPI = new UserAPI();
-
         // Create a API for Instance CRUD
         $instanceAPI = new InstanceAPI();
+        // Create a API for Contact CRUD
+        $contactAPI = new  contactAPI();
 
         /**********************/
         
@@ -102,6 +104,37 @@
         /* Instance Action End */
 
         /***********************/
+/*Contact Action */
+        else if($_GET["action"] == 'fetchAllContact')
+        {
+            $data = $contactAPI->fetchAllContact();
+        }//
+        else if($_GET["action"] == 'fetchAllUrlSelect'){
+            $data = $instanceAPI->fetchAllUrlSelect();
+
+        }
+        // Perform insert user action
+        else if($_GET["action"] == 'insertContact')
+        {
+            $data = $contactAPI->insertConctact();
+            $data = $data[0];
+        }
+        // Perform update user action
+        else if($_GET["action"] == 'updateContact')
+        {
+            $data = $contactAPI->updateContact();
+            $data = $data[0];
+        }
+        // Perform remove user action
+        else if($_GET["action"] == 'removeContact')
+        {
+            $data = $contactAPI->removeContact();
+            $data = $data[0];
+        }
+
+
+
+
 
         // No action to perform
         else
