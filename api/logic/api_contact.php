@@ -207,7 +207,7 @@
                     if ($statement->rowCount()) {
                         $data[] = array('result' => '1');
                     } else {
-                        $data[] = array('result' => 'No operations performed on the database! chomaul aqui');
+                        $data[] = array('result' => 'No operations performed on the database!');
                     }
                 } else {
                     // Check for missing parameters
