@@ -3,6 +3,8 @@
     require_once('logic/api_user.php');
     require_once('logic/api_instance.php');
     require_once('logic/api_contact.php');
+    require_once('logic/api_group.php');
+    require_once('logic/api_contact_group.php');
 
     // Create session
     session_start();
@@ -16,6 +18,9 @@
         $instanceAPI = new InstanceAPI();
         // Create a API for Contact CRUD
         $contactAPI = new  contactAPI();
+         // Create a API for CroupAPI CRUD
+         $grupotAPI = new  GroupAPI();
+         $grupo_contactAPI = new  Group_ContactAPI();
 
         /**********************/
         
@@ -111,6 +116,45 @@
         }//
         else if($_GET["action"] == 'fetchAllUrlSelect'){
             $data = $instanceAPI->fetchAllUrlSelect();
+        }  else if($_GET["action"] == 'fetchAllUrlSelect'){
+            $data = $instanceAPI->fetchAllUrlSelect();
+        }
+        // select conatct
+        else if($_GET["action"] == 'fetchAllContactSelect'){
+            $data = $instanceAPI->fetchAllContactSelect();
+
+        }//URL Contac Select
+        else if($_GET["action"] == 'fetchAllInstanceContact'){
+            $data = $contactAPI->fetchAllContactInstance();
+
+        }
+        
+        // Perfom Group action
+        else if($_GET["action"] == 'insertGroup')
+        {
+            $data = $grupotAPI->insertGroup();
+        } 
+         else if($_GET["action"] == 'fetchAllGroup')
+        {
+            $data = $grupotAPI->fetchAllGroup();
+        }
+        // contact group
+        else if($_GET["action"] == 'fetchAllGroupContact')
+        {
+            $data = $grupo_contactAPI->fetchAllGroup_contact();
+        }
+        //
+        else if($_GET["action"] == 'insertContact_group')
+        {
+            $data = $grupo_contactAPI->insertGroup_Contact();
+        }
+         else if($_GET["action"] == 'removeContact_group')
+        {
+            $data = $grupo_contactAPI->removeContact_Group();
+            $data = $data[0];
+        }
+        else if($_GET["action"] == 'fetchAllInstanceGroup'){
+            $data = $grupo_contactAPI->fetchAllGrouptInstance();
 
         }
         // Perform insert user action
@@ -130,10 +174,8 @@
         {
             $data = $contactAPI->removeContact();
             $data = $data[0];
-        }
-
-
-
+        } 
+        
 
 
         // No action to perform

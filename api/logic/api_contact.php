@@ -254,6 +254,83 @@
                 die("Error message: " . $e->getMessage());
             }
         }
+
+        public function fetchAllUrlContactSelect() {
+            try {
+                // Select all users
+                if (isset($_POST["id"])){
+                $query = "select *from tb_contact ,tb_user,tb_instance where instance_id=11";
+                // Create object to connect to MySQL using PDO
+                $mysqlPDO = new MySQLPDO();
+                // Prepare the query
+                $statement = $mysqlPDO->getConnection()->prepare($query);
+                // Execute the query without paramters
+                $statement->execute();
+                // Get affect rows in associative array
+                $rows = $statement->fetchAll();
+                // Foreach row in array
+                foreach ($rows as $row) {
+                    // Create a User object
+                    $contact = new  Contact($row);
+                    //Create datatable row
+                    $tmp_data[] = $contact;
+                }
+                // Export into DataTable json format if there's any record in $tmp_data
+                if (isset($tmp_data) && count($tmp_data) > 0) {
+                    $data = $tmp_data;
+                } else {
+                    $data = array();
+                }
+            }else{
+                if (!isset($_POST["id"])){
+                    $data[] = array('result' => 'All missing parameters to update the instance!');
+                }
+            }
+                return $data;
+            } catch (PDOException $e) {
+                die("Error message: " . $e->getMessage());
+            }
+        }
+        public function fetchAllContactInstance() {
+            try {
+                // Select all users
+                if (isset($_POST["id"])){
+                    $id=$_POST["id"];
+                $query = "
+                        select *FROM tb_contact tc, tb_instance ti, tb_user tu  
+                        where tu.id=ti.user_id AND ti.id=tc.instance_id AND tc.instance_id='".$id."'";
+                // Create object to connect to MySQL using PDO
+                $mysqlPDO = new MySQLPDO();
+                // Prepare the query
+                $statement = $mysqlPDO->getConnection()->prepare($query);
+                // Execute the query without paramters
+                $statement->execute();
+                // Get affect rows in associative array
+                $rows = $statement->fetchAll();
+                // Foreach row in array
+                foreach ($rows as $row) {
+                    // Create a User object
+                    $contact = new  Contact($row);
+                    //Create datatable row
+                    $tmp_data[] = $contact;
+                }
+                // Export into DataTable json format if there's any record in $tmp_data
+                if (isset($tmp_data) && count($tmp_data) > 0) {
+                    $data = $tmp_data;
+                } else {
+                    $data = array();
+                }
+            }else{
+                if (!isset($_POST["id"])){
+                    $data[] = array('result' => 'All missing parameters to update the instance!');
+                }
+            }
+                return $data;
+            } catch (PDOException $e) {
+                die("Error message: " . $e->getMessage());
+            }
+        }
+        
     }
 
 

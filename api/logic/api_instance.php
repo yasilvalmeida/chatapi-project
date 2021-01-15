@@ -260,6 +260,44 @@
                 die("Error message: " . $e->getMessage());
             }
         }
+        /* conact selected*/
+
+        public function fetchAllContactSelect() {
+            try {
+                // Select all users
+                $query = "select ti.id, url,token,username,user_id
+                from tb_instance ti
+                join tb_user tu on tu.id = ti.user_id
+                order by tu.username";
+                // Create object to connect to MySQL using PDO
+                $mysqlPDO = new MySQLPDO();
+                // Prepare the query
+                $statement = $mysqlPDO->getConnection()->prepare($query);
+                // Execute the query without paramters
+                $statement->execute();
+                // Get affect rows in associative array
+                $rows = $statement->fetchAll();
+                // Foreach row in array
+                foreach ($rows as $row) {
+                    // Create a User object
+                    $instance = new Instance($row);
+                    //Create datatable row
+                    $tmp_data[] = $instance;
+                }
+                // Export into DataTable json format if there's any record in $tmp_data
+                if (isset($tmp_data) && count($tmp_data) > 0) {
+                    $data = $tmp_data;
+                } else {
+                    $data = array();
+                }
+                return $data;
+            } catch (PDOException $e) {
+                die("Error message: " . $e->getMessage());
+            }
+        }
+
+
+
     }
 
 
