@@ -4,25 +4,27 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Insert new instance</h5>
+                <h5 class="modal-title">Insert new Group</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form class="user">
+
                     <div class="form-group">
-                        <select id='user_add' class='form-control'>
+                        <label>Name of group</label>
+                        <input id="name_group" type="text" class="form-control form-control" />
+                    </div>
+                    
+                    <div class="form-group">
+                    <label>ALL URL</label>
+                        <select id='url_add' class='form-control'>
+                     <!--   <select id='id_allcontact' class='form-control' onchange="javascript:selectContact()">-->
                         </select>
                     </div>
-                    <div class="form-group">
-                        <input id="url_add" type="text" class="form-control form-control" placeholder="URL"/>
-                    </div>
-                    <div class="form-group">
-                        <input id="token_add" type="text" class="form-control form-control" placeholder="Token"/>
-                    </div>
                     <hr />
-                    <div id="insert_state" class="d-flex justify-content-center"  role="alert">
+                    <div id="insert_state" class="d-flex justify-content-center" role="alert">
                     </div>
                 </form>
             </div>
@@ -62,12 +64,12 @@
                         <input id="user_old_id" type="hidden" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                    <label>New Usermane</label>
+                        <label>New Usermane</label>
                         <select id='user_new' class='form-control'>
                         </select>
                     </div>
                     <hr />
-                    <div id="update_state"  class="d-flex justify-content-center" role="alert">
+                    <div id="update_state" class="d-flex justify-content-center" role="alert">
                     </div>
                 </form>
             </div>

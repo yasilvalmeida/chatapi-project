@@ -1,0 +1,49 @@
+{
+    "packages": [
+        {
+            "name": "mikechip/chatapi",
+            "version": "2.0.0",
+            "version_normalized": "2.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mikechip/whatsapp-chatapi-sdk.git",
+                "reference": "d883ffb2df76167d0a266dd507d9baa82d9cd379"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mikechip/whatsapp-chatapi-sdk/zipball/d883ffb2df76167d0a266dd507d9baa82d9cd379",
+                "reference": "d883ffb2df76167d0a266dd507d9baa82d9cd379",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "time": "2019-04-27T06:36:19+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "chatapi.class.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Boris Stelmakh",
+                    "email": "mikael.chip@gmail.com"
+                }
+            ],
+            "description": "Simple middleware to work with Chat-API.com",
+            "support": {
+                "issues": "https://github.com/mikechip/whatsapp-chatapi-sdk/issues",
+                "source": "https://github.com/mikechip/whatsapp-chatapi-sdk/tree/master"
+            },
+            "install-path": "../mikechip/chatapi"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

@@ -1,10 +1,23 @@
 <!-- Modals -->
 <!-- Add Modal-->
+<style>
+    .chat-header-button {
+        background: transparent none repeat scroll 0 0;
+        border: 1px solid red;
+        border-radius: 7px;
+        font-size: 15px;
+        height: 26px;
+        opacity: 0.9;
+        padding: 0;
+        text-align: center;
+        width: 26px;
+    }
+</style>
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Insert new instance</h5>
+                <h5 class="modal-title"> Send New Message</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -12,23 +25,45 @@
             <div class="modal-body">
                 <form class="user">
                     <div class="form-group">
-                        <select id='user_add' class='form-control'>
+                        <label>ALL URL + TOKEN</label>
+                        <select id='id_allcontact' class='form-control' onchange="javascript:selectContact()">
+                            <!--   <select id='id_allcontact' class='form-control' onchange="javascript:selectContact()">-->
                         </select>
                     </div>
                     <div class="form-group">
-                        <input id="url_add" type="text" class="form-control form-control" placeholder="URL"/>
-                    </div>
-                    <div class="form-group">
-                        <input id="token_add" type="text" class="form-control form-control" placeholder="Token"/>
+
+                        <label>Message</label>
+                        <textarea id="id_message" class="form-control" rows="4" cols="50" placeholder="Type a message"></textarea>
                     </div>
                     <hr />
-                    <div id="insert_state" class="d-flex justify-content-center"  role="alert">
+                    <label for="file" class="form-label"><img src="assets/img/camera.png" width="60" height="60"></label>
+                    <input class="form-control" type="file" id="file" style="display:none" />
+                    <label for="filepdf" class="form-label"><img src="assets/img/pdf.png" width="43" height="40"></label>
+                    <input class="form-control" type="file" id="filepdf" style="display:none" />
+                    <br>
+                    <center>
+                        <input type="radio" name="gender" id="radio_all_contact">&nbsp;&nbsp;Contact&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="gender" id="radio_all_group">&nbsp;&nbsp; Group&nbsp;&nbsp;&nbsp;
+                    </center>
+                    <div class="form-group">
+                        <select id='id_allcontact_instance' class='form-control' style="display:none;" >
+                            <!--   <select id='id_allcontact' class='form-control' onchange="javascript:selectContact()">-->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select id='id_allgroup_instance' class='form-control' style="display:none;" >
+                            <!--   <select id='id_allcontact' class='form-control' onchange="javascript:selectContact()">-->
+                        </select>
+                    </div>
+                    <div id="insert_state" class="d-flex justify-content-center" role="alert">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-success" href="javascript:insert()">Save</a>
+                <a class="btn btn-success" href="javascript:insert()">Send</a>
             </div>
         </div>
     </div>
@@ -38,7 +73,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Update instance</h5>
+                <h5 class="modal-title">Update contact</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -49,26 +84,15 @@
                         <input id="id_upd" type="hidden" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                        <label>URL </label>
-                        <input id="url_upd" type="text" class="form-control form-control" />
+                        <label>Name </label>
+                        <input id="name_upd" type="text" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                        <label>Token </label>
-                        <input id="token_upd" type="text" class="form-control form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label>Usermane Old </label>
-                        <input id="user_old" type="text" class="form-control form-control" />
-                        <input id="user_old_id" type="hidden" class="form-control form-control" />
-                    </div>
-                    <div class="form-group">
-                    <label>New Usermane</label>
-                        <select id='user_new' class='form-control'>
-                        </select>
+                        <label>Number </label>
+                        <input id="number_upd" type="text" class="form-control form-control" />
                     </div>
                     <hr />
-                    <div id="update_state"  class="d-flex justify-content-center" role="alert">
-                    </div>
+                    <div id="update_state" class="d-flex justify-content-center" role="alert"></div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -83,7 +107,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete instance</h5>
+                <h5 class="modal-title">Delete contact</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

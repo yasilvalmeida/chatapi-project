@@ -1,13 +1,17 @@
-var instance_data_table;
+var id_group_contact;
 $(() => {
-    instance_data_table = $("#dataTable").DataTable({
+
+    var t = $("#idgroup");
+    id_group_contact = $("#dataTable").DataTable({
         processing: true,
         serverSide: false,
         order: [],
         ajax: {
-            url: "api/api.php?action=fetchAllInstance",
+            url: "api/api.php?action=fetchAllGroupContact",
             type: "POST",
-            data: {},
+            data: {
+                id: t.val()
+            },
         },
         oLanguage: {
             sSearch: "Search for <i class='fa fa-search'></i>",
@@ -18,7 +22,10 @@ $(() => {
                 sLast: "Last", // This is the link to the last page
             },
         },
-        columnDefs: [{ orderable: false, targets: [1, 3, 4] }],
+        columnDefs: [{
+            orderable: false,
+            targets: [1, 3, 4]
+        }],
     });
     /* This function will update the text in the tips div the the text and the css */
     updateTips = (tips, t) => {
@@ -51,18 +58,18 @@ $(() => {
         }
     };
     $("#addModal").on("show.bs.modal", () => {
-        var tips = $("#user_add");
+        var tips = $("#url_add");
         tips.html("<img src='assets/img/loader.gif' />");
-        $.post("api/api.php?action=fetchAllUserSelect", {},
+        $.post("api/api.php?action=fetchAllUrlSelect", {},
             (data, status) => {
                 if (status == "success") {
                     try {
                         let html = '<option value="-1">Select</option>';
-                        const users = JSON.parse(data);
-                        users.map((user, i) => {
-                            html += '<option value="' + user.id + '">' + user.username + '</option>';
+                        const intance = JSON.parse(data);
+                        intance.map((intance, i) => {
+                            html += '<option value="' + intance.id + '">' + intance.url + '</option>';
                         });
-                        $("#user_add").html(html);
+                        $("#url_add").html(html);
                     } catch (error) {
                         updateTips(tips, error);
                     }
@@ -86,7 +93,7 @@ checkLength = (o, n, min, max, tips) => {
         o.focus();
         updateTips(
             tips,
-            "The longth of" + n + " must be between " + min + " e " + max + "."
+            "The longitude of" + n + " must be between " + min + " e " + max + "."
         );
         return false;
     } else {
@@ -105,40 +112,62 @@ checkRegexp = (o, regexp, n, tips) => {
 };
 
 function insert() {
-    var url_add = $("#url_add"),
-        token_add = $("#token_add"),
-        userId = $("#user_add option:selected").val(),
+    var name_add = $("#name_add"),
+        number_add = $("#number_add"),
+        url_id = $("#url_add option:selected").val(),
         tips = $("#insert_state");
     tips.removeClass("alert-danger").addClass("alert-light");
-    if (userId == -1) {
-        updateTips(tips, "Please select a user");
-        userId.focus();
-    } else if (url_add.val() == "") {
-        updateTips(tips, "Please fill in the url");
-        url_add.focus();
-    } else if (token_add.val() == "") {
-        updateTips(tips, "Please fill in the token");
-        token_add.focus();
+    if (url_id == -1) {
+        updateTips(tips, "Please select a url of token");
+        url_id.focus();
+    } else if (name_add.val() == "") {
+        updateTips(tips, "Please fill in the name");
+        name_add.focus();
+    } else if (number_add.val() == "") {
+        updateTips(tips, "Please fill in the number");
+        number_add.focus();
     } else {
         insertAsync();
     }
 }
 
-function insertAsync() {
+function add_group(group_contact) {
     var tips = $("#insert_state");
-    const userId = $("#user_add option:selected").val();
 
-    if (userId == undefined) {
-        updateTips(tips, "Please select the user first!");
+    $("#phone_manber").val(group_contact.contact);
+    $("#name_contact").val(group_contact.name);
+    $("#id_contact").val(group_contact.id);
+    var phone_manber = $("#phone_manber").val();
+    var name_contact = $("#name_contact").val();
+    if (phone_manber == "") {
+        updateTips(tips, "Please select one Contact");
+    } else if (name_contact == "") {
+        updateTips(tips, "Please select one Contact");
+    } else {
+        $("#addModal").modal("show");
+
+    }
+
+}
+
+function insertAsync_group() {
+
+    var tips = $("#insert_state");
+    var id_contact = $("#id_contact").val();;
+    var id_group = $("#idgroup").val();
+    if (id_contact == "") {
+        updateTips(tips, "Please select one Contact");
+    } else if (id_group == "") {
+        updateTips(tips, "Please select one Group");
     } else {
         tips.addClass("alert-light");
         tips.html("<img src='assets/img/loader.gif' />");
-        $.post("api/api.php?action=insertInstance", {
-                url: $("#url_add").val(),
-                token: $("#token_add").val(),
-                user_id: userId
+        $.post("api/api.php?action=insertContact_group", {
+                id: id_contact,
+                id_group: $("#idgroup").val()
             },
             (data, status) => {
+                alert(data)
                 if (status == "success") {
                     try {
                         var r = JSON.parse(data);
@@ -146,8 +175,9 @@ function insertAsync() {
                             tips.html("Successfully registered");
                             $("#addModal").modal("hide");
                             clear_form();
-                            instance_data_table.ajax.reload();
+                            id_group_contact.ajax.reload();
                         } else {
+
                             updateTips(tips, r.result);
                         }
                     } catch (error) {
@@ -161,54 +191,24 @@ function insertAsync() {
     }
 }
 
-function update(instance) {
+function update(contact) {
     var tips = $("#update_state");
-    $("#id_upd").val(instance.id);
-    $("#url_upd").val(instance.url);
-    $("#token_upd").val(instance.token);
-    $("#user_old").val(instance.username);
-    $("#user_old_id").val(instance.user_id);
+    $("#id_upd").val(contact.id);
+    $("#name_upd").val(contact.name);
+    $("#number_upd").val(contact.number);
     tips.addClass("alert-light");
-    var tips = $("#user_new");
-    tips.html("<img src='assets/img/loader.gif' />");
-    $.post("api/api.php?action=fetchAllUserSelect", {},
-        (data, status) => {
-            if (status == "success") {
-                try {
-                    let html = '<option value="-1">Select</option>';
-                    const users = JSON.parse(data);
-                    users.map((user, i) => {
-                        html += '<option value="' + user.id + '">' + user.username + '</option>';
-                    });
-                    $("#user_new").html(html);
-                } catch (error) {
-                    updateTips(tips, error);
-                }
-            } else {
-                updateTips(tips, data);
-            }
-        }
-    );
     $("#updModal").modal("show");
 }
 
 function updateAsync() {
-    var user_new = $("#user_new option:selected").val();
-    var user_nam = "";
-    if (user_new == -1) {
-        user_nam = $("#user_old_id").val();
-    } else {
-        user_nam = user_new;
-    }
     var tips = $("#update_state");
     tips.addClass("alert-light");
     tips.html("<img src='assets/img/loader.gif' />");
     $.post(
-        "api/api.php?action=updateInstance", {
+        "api/api.php?action=updateContact", {
             id: $("#id_upd").val(),
-            url: $("#url_upd").val(),
-            token: $("#token_upd").val(),
-            user_new_id: user_nam
+            name: $("#name_upd").val(),
+            number: $("#number_upd").val(),
         },
         (data, status) => {
             if (status == "success") {
@@ -218,7 +218,7 @@ function updateAsync() {
                         tips.html("I successfully altered!");
                         $("#updModal").modal("hide");
                         clear_form();
-                        instance_data_table.ajax.reload();
+                        id_group_contact.ajax.reload();
                     } else {
                         updateTips(tips, r.result);
                     }
@@ -245,7 +245,7 @@ function removeAsync() {
     tips.addClass("alert-light");
     tips.html("<img src='assets/img/loader.gif' />");
     $.post(
-        "api/api.php?action=removeInstance", {
+        "api/api.php?action=removeContact_group", {
             id: $("#id_del").val(),
         },
         (data, status) => {
@@ -256,7 +256,7 @@ function removeAsync() {
                         tips.html("Successfully removed!");
                         $("#delModal").modal("hide");
                         clear_form();
-                        instance_data_table.ajax.reload();
+                        id_group_contact.ajax.reload();
                     } else {
                         updateTips(tips, r.result);
                     }
@@ -273,7 +273,8 @@ function removeAsync() {
 function clear_form() {
     /* Insert */
     $("#url_add").val("");
-    $("#token_add").val("");
+    $("#name_add").val("");
+    $("#number_add").val("");
     $("#insert_state").removeClass("alert-success");
     $("#insert_state").addClass("alert-light");
     $("#insert_state").html("");
@@ -286,8 +287,11 @@ function clear_form() {
     /* Remove */
     $("#id_to_remove").val("");
     $("#remove_state").removeClass("alert-success");
+    $("#remove_state").addClass("alert-light");
     $("#remove_state").html("");
 }
-$("#remove_state").addClass("alert-light");
+$("#remove_state").html("");
+$("#remove_state").html("");
+$("#remove_state").html("");
 $("#remove_state").html("");
 $("#remove_state").html("");

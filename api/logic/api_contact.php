@@ -1,19 +1,18 @@
 <?php
     // Import the needed classes
     require_once("mysql_pdo.php");
-    require_once("classes/instance.php");
+    require_once("classes/contact.php");
     // API for User CRUD Class
-    class InstanceAPI {
+    class contactAPI {
         /* User Actions Begin */
         /* Retrieve all instances on the database */
-        public function fetchAllInstance() {
+        public function fetchAllContact() {
             try {
                 // Select all users
-                $query = "
-                        select ti.id, url,token,username,user_id
-                        from tb_instance ti
-                        join tb_user tu on tu.id = ti.user_id
-                        order by tu.username";
+                $query = "select * from
+                          tb_instance ti , tb_user tu , tb_contact tc
+                          where ti.user_id=tu.id AND ti.id=tc.instance_id 
+                          ORDER by username asc";
                 // Create object to connect to MySQL using PDO
                 $mysqlPDO = new MySQLPDO();
                 // Prepare the query
@@ -25,15 +24,16 @@
                 // Foreach row in array
                 foreach ($rows as $row) {
                     // Create a Instance object
-                    $instance = new Instance($row);
+                    $contact = new Contact($row);
                     //Create datatable row
                     $tmp_data[] = array(
-                        $instance->getId(),
-                        $instance->getURL(),
-                        $instance->getToken(),
-                        $instance->getUsername(),
-                        "<div class='span12' style='text-align:center'><a href='javascript:update(".json_encode($instance).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
-                        "<div class='span12' style='text-align:center'><a href='javascript:remove(".$instance->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
+                        $contact->getId(),
+                        $contact->getNamber(),
+                        $contact->getName(),
+                        $contact->getUrl(),
+                        $contact->getUsermane(),
+                        "<div class='span12' style='text-align:center'><a href='javascript:update(".json_encode($contact).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
+                        "<div class='span12' style='text-align:center'><a href='javascript:remove(".$contact->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
                     );
                 }
                 // Export into DataTable json format if there's any record in $tmp_data
@@ -52,25 +52,24 @@
             }
         }
         /* Insert new instance */
-        public function insertInstance() {
+        public function insertConctact() {
             try {
                 /* Check if for the empty or null token, password and access parameters */
-                if (isset($_POST["url"]) && isset($_POST["token"]) && isset($_POST["user_id"])) {
+                if (isset($_POST["number"]) && isset($_POST["name"]) && isset($_POST["instance_id"])) {
                     // Get the token from POST request to check
                     $check_data = array(
-                        ':url' => $_POST["url"]
+                        ':number_add' => $_POST["number"]
                     );
                     // Get the token, password and access from POST request to insert
                     $form_data = array(
-                        ':url'     => $_POST["url"],
-                        ':token'   => $_POST["token"],
-                        ':user_id' => $_POST["user_id"],
+                        ':number_add'  => $_POST["number"],
+                        ':name_add'    => $_POST["name"],
+                        ':url_id'      => $_POST["instance_id"],
                     );
                     // Check for existent instance with the same token in Database
-                    $query = "
-                            select id 
-                            from tb_instance 
-                            where url = :url
+                    $query = "select id from
+                              tb_contact 
+                               where number =:number_add;
                             ";
                     // Create object to connect to MySQL using PDO
                     $mysqlPDO = new MySQLPDO();
@@ -86,7 +85,7 @@
                     } else {
                         // Create a SQL query to insert an new instance with a new token, password and access
                         $query = "
-                                insert tb_instance(url, token, user_id) values(:url, :token, :user_id);
+                                 insert  tb_contact(number, name ,instance_id)values(:number_add, :name_add, :url_id);
                                 ";
                         // Prepare the query
                         $statement = $mysqlPDO->getConnection()->prepare($query);
@@ -101,14 +100,14 @@
                     }
                 } else {
                     // Check for missing parameters
-                    if (!isset($_POST["url"]) && !isset($_POST["token"]) && !isset($_POST["user_id"])) {
+                    if (!isset($_POST["number"]) && !isset($_POST["name"]) && !isset($_POST["instance_id"])) {
                         $data[] = array('result' => 'Missing all parameters');
-                    } elseif (!isset($_POST["url"])) {
-                        $data[] = array('result' => 'Missing url parameter!');
-                    } elseif (!isset($_POST["token"])) {
-                        $data[] = array('result' => 'Missing username parameter!');
+                    } elseif (!isset($_POST["number"])) {
+                        $data[] = array('result' => 'Missing number parameter!');
+                    } elseif (!isset($_POST["name"])) {
+                        $data[] = array('result' => 'Missing name parameter!');
                     } else {
-                        $data[] = array('result' => 'Missing user_id parameter!');
+                        $data[] = array('result' => 'Missing instance parameter!');
                     }
                 }
                 return $data;
@@ -117,28 +116,25 @@
             }
         }
         /* Update instance */
-        public function updateInstance() {
+        public function updateContact() {
             try {
                 /* Check if for the empty or null id, token, password and access parameters */
-                if (isset($_POST["id"]) && isset($_POST["url"]) && isset($_POST["token"]) && isset($_POST["user_new_id"])) {
+                if (isset($_POST["id"]) && isset($_POST["name"]) && isset($_POST["number"])) {
                     // Get the id and token from POST request to check
                     $check_data = array(
-                        ':id'  => $_POST["id"],
-                        ':url' => $_POST["url"]
+                        ':id'     => $_POST["id"],
+                        ':number' => $_POST["number"],
                     );
                     // Get the id, token, password and access from POST request to update
                     $form_data = array(
-                        ':id'      => $_POST["id"],
-                        ':url'     => $_POST["url"],
-                        ':token'   => $_POST["token"],
-                        ':user_id' => $_POST["user_new_id"],
+                        ':id'     => $_POST["id"],
+                        ':number' => $_POST["number"],
+                        ':name'   => $_POST["name"],
                     );
                     // Check for existent instance with the same token but different id in Database
-                    $query = "
-                            select id 
-                            from tb_instance 
-                            where id != :id and url = :url
-                            ";
+                    $query = "select id from
+                              tb_contact 
+                              where id !=:id and number=:number";
                     // Create object to connect to MySQL using PDO
                     $mysqlPDO = new MySQLPDO();
                     // Prepare the query
@@ -153,11 +149,9 @@
                     } else {
                         // Create a SQL query to update an existent instance with a new token, password and access with passed id
                         $query = "
-                                update tb_instance
-                                set url = :url,
-                                    token = :token,
-                                    user_id = :user_id
-                                where id = :id;
+                                update tb_contact SET 
+                                number=:number, name=:name  
+                                where  id=:id;
                                 ";
                         // Prepare the query
                         $statement = $mysqlPDO->getConnection()->prepare($query);
@@ -172,16 +166,16 @@
                     }
                 } else {
                     // Check for missing parameters
-                    if (!isset($_POST["id"]) && !isset($_POST["url"]) && !isset($_POST["token"]) && !isset($_POST["user_id"])) {
+                    if (!isset($_POST["id"]) && !isset($_POST["number"]) && !isset($_POST["name"])) {
                         $data[] = array('result' => 'All missing parameters to update the instance!');
                     } elseif (!isset($_POST["id"])) {
                         $data[] = array('result' => 'Missing id parameter!');
-                    } elseif (!isset($_POST["url"])) {
-                        $data[] = array('result' => 'Missing url parameter!');
-                    } elseif (!isset($_POST["token"])) {
-                        $data[] = array('result' => 'Missing username parameter!');
+                    } elseif (!isset($_POST["number"])) {
+                        $data[] = array('result' => 'Missing number parameter!');
+                    } elseif (!isset($_POST["name"])) {
+                        $data[] = array('result' => 'Missing name parameter!');
                     } else {
-                        $data[] = array('result' => 'Missing user_id parameter!');
+                        $data[] = array('result' => 'Missing id parameter!');
                     }
                 }
                 return $data;
@@ -190,7 +184,7 @@
             }
         }
         /* Remove instance */
-        public function removeInstance() {
+        public function removeContact() {
             try {
                 /* Check if for the empty or null id parameters */
                 if (isset($_POST["id"])) {
@@ -200,7 +194,7 @@
                     );
                     // Create a SQL query to remove an existent instance with passed id
                     $query = "
-                            delete from tb_instance
+                            delete from tb_contact
                             where id = :id;
                             ";
                     // Create object to connect to MySQL using PDO
@@ -230,10 +224,10 @@
         public function fetchAllUrlSelect() {
             try {
                 // Select all users
-                $query = "select ti.id, url,token,username,user_id
-                from tb_instance ti
-                join tb_user tu on tu.id = ti.user_id
-                order by tu.username";
+                $query = "select *
+                       from tb_instance ti
+                       join tb_user tu on tu.id = ti.user_id
+                       order by tu.username";
                 // Create object to connect to MySQL using PDO
                 $mysqlPDO = new MySQLPDO();
                 // Prepare the query
@@ -260,15 +254,12 @@
                 die("Error message: " . $e->getMessage());
             }
         }
-        /* conact selected*/
 
-        public function fetchAllContactSelect() {
+        public function fetchAllUrlContactSelect() {
             try {
                 // Select all users
-                $query = "select ti.id, url,token,username,user_id
-                from tb_instance ti
-                join tb_user tu on tu.id = ti.user_id
-                order by tu.username";
+                if (isset($_POST["id"])){
+                $query = "select *from tb_contact ,tb_user,tb_instance where instance_id=11";
                 // Create object to connect to MySQL using PDO
                 $mysqlPDO = new MySQLPDO();
                 // Prepare the query
@@ -280,9 +271,9 @@
                 // Foreach row in array
                 foreach ($rows as $row) {
                     // Create a User object
-                    $instance = new Instance($row);
+                    $contact = new  Contact($row);
                     //Create datatable row
-                    $tmp_data[] = $instance;
+                    $tmp_data[] = $contact;
                 }
                 // Export into DataTable json format if there's any record in $tmp_data
                 if (isset($tmp_data) && count($tmp_data) > 0) {
@@ -290,14 +281,56 @@
                 } else {
                     $data = array();
                 }
+            }else{
+                if (!isset($_POST["id"])){
+                    $data[] = array('result' => 'All missing parameters to update the instance!');
+                }
+            }
                 return $data;
             } catch (PDOException $e) {
                 die("Error message: " . $e->getMessage());
             }
         }
-
-
-
+        public function fetchAllContactInstance() {
+            try {
+                // Select all users
+                if (isset($_POST["id"])){
+                    $id=$_POST["id"];
+                $query = "
+                        select *FROM tb_contact tc, tb_instance ti, tb_user tu  
+                        where tu.id=ti.user_id AND ti.id=tc.instance_id AND tc.instance_id='".$id."'";
+                // Create object to connect to MySQL using PDO
+                $mysqlPDO = new MySQLPDO();
+                // Prepare the query
+                $statement = $mysqlPDO->getConnection()->prepare($query);
+                // Execute the query without paramters
+                $statement->execute();
+                // Get affect rows in associative array
+                $rows = $statement->fetchAll();
+                // Foreach row in array
+                foreach ($rows as $row) {
+                    // Create a User object
+                    $contact = new  Contact($row);
+                    //Create datatable row
+                    $tmp_data[] = $contact;
+                }
+                // Export into DataTable json format if there's any record in $tmp_data
+                if (isset($tmp_data) && count($tmp_data) > 0) {
+                    $data = $tmp_data;
+                } else {
+                    $data = array();
+                }
+            }else{
+                if (!isset($_POST["id"])){
+                    $data[] = array('result' => 'All missing parameters to update the instance!');
+                }
+            }
+                return $data;
+            } catch (PDOException $e) {
+                die("Error message: " . $e->getMessage());
+            }
+        }
+        
     }
 
 

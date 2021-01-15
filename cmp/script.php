@@ -7,6 +7,8 @@
 <script src="assets/js/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 <script src="assets/js/script.min.js"></script>
 <script src="assets/js/main.js"></script>
+
+
 <?php
     require("cmp/modal/main.php");
 ?>

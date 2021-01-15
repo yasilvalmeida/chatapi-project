@@ -4,7 +4,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Insert new instance</h5>
+                <h5 class="modal-title">Insert new conctact</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -12,16 +12,19 @@
             <div class="modal-body">
                 <form class="user">
                     <div class="form-group">
-                        <select id='user_add' class='form-control'>
+                        <label>Url of token</label>
+                        <select id='url_add' class='form-control'>
                         </select>
                     </div>
                     <div class="form-group">
-                        <input id="url_add" type="text" class="form-control form-control" placeholder="URL"/>
+                        <label>Name</label>
+                        <input id="name_add" type="text" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                        <input id="token_add" type="text" class="form-control form-control" placeholder="Token"/>
+                        <label>Number</label>
+                        <input id="number_add" type="text" class="form-control form-control"/>
                     </div>
-                    <hr />
+                    <hr/>
                     <div id="insert_state" class="d-flex justify-content-center"  role="alert">
                     </div>
                 </form>
@@ -38,7 +41,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Update instance</h5>
+                <h5 class="modal-title">Update contact</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -49,26 +52,15 @@
                         <input id="id_upd" type="hidden" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                        <label>URL </label>
-                        <input id="url_upd" type="text" class="form-control form-control" />
+                        <label>Name </label>
+                        <input id="name_upd" type="text" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                        <label>Token </label>
-                        <input id="token_upd" type="text" class="form-control form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label>Usermane Old </label>
-                        <input id="user_old" type="text" class="form-control form-control" />
-                        <input id="user_old_id" type="hidden" class="form-control form-control" />
-                    </div>
-                    <div class="form-group">
-                    <label>New Usermane</label>
-                        <select id='user_new' class='form-control'>
-                        </select>
+                        <label>Number </label>
+                        <input id="number_upd" type="text" class="form-control form-control" />
                     </div>
                     <hr />
-                    <div id="update_state"  class="d-flex justify-content-center" role="alert">
-                    </div>
+                    <div id="update_state"  class="d-flex justify-content-center" role="alert"></div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -83,7 +75,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete instance</h5>
+                <h5 class="modal-title">Delete contact</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
