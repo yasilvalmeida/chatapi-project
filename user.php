@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <?php
     require_once("cmp/session.php");
+    $access = $_SESSION[$_SESSION['views'].'access'];
+    if ($access == 1) {
+        header('Location: main.php');
+    }
 ?>
 <html>
     <head>

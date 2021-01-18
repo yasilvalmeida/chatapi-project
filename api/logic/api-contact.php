@@ -9,84 +9,92 @@
         /* Retrieve all contacts on the database */
         public function fetchAllContact() {
             try {
-                // Select all users
-                $query = "
-                        select tc.id, tc.name, tc.phone, tc.instance_id, ti.instance
-                        from tb_user tu
-                        join tb_instance ti on ti.user_id = tu.id
-                        join tb_contact tc on tc.instance_id = ti.id
-                        order by tu.username asc
-                        ";
-                // Create object to connect to MySQL using PDO
-                $mysqlPDO = new MySQLPDO();
-                // Prepare the query
-                $statement = $mysqlPDO->getConnection()->prepare($query);
-                // Execute the query without paramters
-                $statement->execute();
-                // Get affect rows in associative array
-                $rows = $statement->fetchAll();
-                // Foreach row in array
-                foreach ($rows as $row) {
-                    // Create a Instance object
-                    $contact = new Contact($row);
-                    //Create datatable row
-                    $tmp_data[] = array(
-                        $contact->getName(),
-                        $contact->getPhone(),
-                        $contact->getInstance(),
-                        "<div style='text-align:center'><a href='javascript:update(".json_encode($contact).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
-                        "<div style='text-align:center'><a href='javascript:remove(".$contact->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
-                    );
+                if (!isset($_POST["user_id"])) {
+                    // Select all users
+                    $query = "
+                            select tc.id, tc.name, tc.phone, tc.instance_id, ti.instance
+                            from tb_contact tc
+                            join tb_instance ti on ti.id = tc.instance_id
+                            order by tc.name, tc.phone, ti.instance asc
+                            ";
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query without paramters
+                    $statement->execute();
+                    // Get affect rows in associative array
+                    $rows = $statement->fetchAll();
+                    // Foreach row in array
+                    foreach ($rows as $row) {
+                        // Create a Instance object
+                        $contact = new Contact($row);
+                        //Create datatable row
+                        $tmp_data[] = array(
+                            $contact->getName(),
+                            $contact->getPhone(),
+                            $contact->getInstance(),
+                            "<div style='text-align:center'><a href='javascript:update(".json_encode($contact).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
+                            "<div style='text-align:center'><a href='javascript:remove(".$contact->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
+                        );
+                    }
+                    // Export into DataTable json format if there's any record in $tmp_data
+                    if (isset($tmp_data) && count($tmp_data) > 0) {
+                        $data = array(
+                            "data" => $tmp_data
+                        );
+                    } else {
+                        $data = array(
+                            "data" => array()
+                        );
+                    }
                 }
-                // Export into DataTable json format if there's any record in $tmp_data
-                if (isset($tmp_data) && count($tmp_data) > 0) {
-                    $data = array(
-                        "data" => $tmp_data
+                else {
+                    // Get the instance id from POST request to check
+                    $check_data = array(
+                        ':user_id' => $_POST["user_id"]
                     );
-                } else {
-                    $data = array(
-                        "data" => array()
-                    );
+                    $query = "
+                            select tc.id, tc.name, tc.phone, tc.instance_id, ti.instance
+                            from tb_contact tc
+                            join tb_instance ti on ti.id = tc.instance_id and ti.user_id = :user_id
+                            order by tc.name, tc.phone, ti.instance asc
+                            ";
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query without paramters
+                    $statement->execute($check_data);
+                    // Get affect rows in associative array
+                    $rows = $statement->fetchAll();
+                    // Foreach row in array
+                    foreach ($rows as $row) {
+                        // Create a Instance object
+                        $contact = new Contact($row);
+                        //Create datatable row
+                        $tmp_data[] = array(
+                            $contact->getName(),
+                            $contact->getPhone(),
+                            $contact->getInstance(),
+                            "<div style='text-align:center'><a href='javascript:update(".json_encode($contact).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
+                            "<div style='text-align:center'><a href='javascript:remove(".$contact->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
+                        );
+                    }
+                    // Export into DataTable json format if there's any record in $tmp_data
+                    if (isset($tmp_data) && count($tmp_data) > 0) {
+                        $data = array(
+                            "data" => $tmp_data
+                        );
+                    } else {
+                        $data = array(
+                            "data" => array()
+                        );
+                    }
                 }
                 return $data;
             } catch (PDOException $e) {
                 die("Error message" . $e->getMessage());
-            }
-        }
-        /* Retrieve all contacts for select */
-        public function fetchAllContactSelect() {
-            try {
-                // Select all contacts
-                $query = "
-                        select ti.id, instance, token, username, user_id
-                        from tb_instance ti
-                        join tb_user tu on tu.id = ti.user_id
-                        order by tu.username
-                        ";
-                // Create object to connect to MySQL using PDO
-                $mysqlPDO = new MySQLPDO();
-                // Prepare the query
-                $statement = $mysqlPDO->getConnection()->prepare($query);
-                // Execute the query without paramters
-                $statement->execute();
-                // Get affect rows in associative array
-                $rows = $statement->fetchAll();
-                // Foreach row in array
-                foreach ($rows as $row) {
-                    // Create a User object
-                    $instance = new Instance($row);
-                    //Create datatable row
-                    $tmp_data[] = $instance;
-                }
-                // Export into DataTable json format if there's any record in $tmp_data
-                if (isset($tmp_data) && count($tmp_data) > 0) {
-                    $data = $tmp_data;
-                } else {
-                    $data = array();
-                }
-                return $data;
-            } catch (PDOException $e) {
-                die("Error message: " . $e->getMessage());
             }
         }
         /* Retrieve all contact by instance for select */

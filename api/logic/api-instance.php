@@ -54,32 +54,68 @@
         /* Retrieve all instances for select on the database */
         public function fetchAllInstanceSelect() {
             try {
-                // Select all instances
-                $query = "
-                        select ti.id, ti.instance, ti.token
-                        from tb_instance ti
-                        order by ti.instance
-                        ";
-                // Create object to connect to MySQL using PDO
-                $mysqlPDO = new MySQLPDO();
-                // Prepare the query
-                $statement = $mysqlPDO->getConnection()->prepare($query);
-                // Execute the query without paramters
-                $statement->execute();
-                // Get affect rows in associative array
-                $rows = $statement->fetchAll();
-                // Foreach row in array
-                foreach ($rows as $row) {
-                    // Create a User object
-                    $instance = new InstanceSelect($row);
-                    //Create datatable row
-                    $tmp_data[] = $instance;
+                if (!isset($_POST["user_id"])) {
+                    // Select all instances
+                    $query = "
+                            select ti.id, ti.instance, ti.token
+                            from tb_instance ti
+                            order by ti.instance
+                            ";
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query without paramters
+                    $statement->execute();
+                    // Get affect rows in associative array
+                    $rows = $statement->fetchAll();
+                    // Foreach row in array
+                    foreach ($rows as $row) {
+                        // Create a User object
+                        $instance = new InstanceSelect($row);
+                        //Create datatable row
+                        $tmp_data[] = $instance;
+                    }
+                    // Export into DataTable json format if there's any record in $tmp_data
+                    if (isset($tmp_data) && count($tmp_data) > 0) {
+                        $data = $tmp_data;
+                    } else {
+                        $data = array();
+                    }
                 }
-                // Export into DataTable json format if there's any record in $tmp_data
-                if (isset($tmp_data) && count($tmp_data) > 0) {
-                    $data = $tmp_data;
-                } else {
-                    $data = array();
+                else {
+                    // Get the instance id from POST request to check
+                    $check_data = array(
+                        ':user_id' => $_POST["user_id"]
+                    );
+                    // Select all instances
+                    $query = "
+                            select ti.id, ti.instance, ti.token
+                            from tb_instance ti
+                            where ti.user_id = :user_id
+                            order by ti.instance
+                            ";
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query without paramters
+                    $statement->execute($check_data);
+                    // Get affect rows in associative array
+                    $rows = $statement->fetchAll();
+                    // Foreach row in array
+                    foreach ($rows as $row) {
+                        // Create a User object
+                        $instance = new InstanceSelect($row);
+                        //Create datatable row
+                        $tmp_data[] = $instance;
+                    }
+                    // Export into DataTable json format if there's any record in $tmp_data
+                    if (isset($tmp_data) && count($tmp_data) > 0) {
+                        $data = $tmp_data;
+                    } else {
+                        $data = array();
+                    }
                 }
                 return $data;
             } catch (PDOException $e) {

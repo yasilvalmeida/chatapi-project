@@ -7,7 +7,9 @@ $(() => {
         ajax: {
             url: "api/api.php?action=fetchAllContact",
             type: "POST",
-            data: {},
+            data: {
+                user_id: $("#logged_id").val()
+            },
         },
         oLanguage: {
             sSearch: "Search for <i class='fa fa-search'></i>",
@@ -53,24 +55,25 @@ $(() => {
     $("#addModal").on("show.bs.modal", () => {
         var tips = $("#instance_add");
         tips.html("<img src='assets/img/loader.gif' />");
-        $.post("api/api.php?action=fetchAllInstanceSelect", {},
-            (data, status) => {
-                if (status == "success") {
-                    try {
-                        let html = '<option value="-1">Select</option>';
-                        const intance = JSON.parse(data);
-                        intance.map((intance, i) => {
-                            html += '<option value="' + intance.id + '">' + intance.instance + '</option>';
-                        });
-                        $("#instance_add").html(html);
-                    } catch (error) {
-                        updateTips(tips, error);
-                    }
-                } else {
-                    updateTips(tips, data);
+        $.post("api/api.php?action=fetchAllInstanceSelect", {
+            user_id: $("#logged_id").val()
+        },
+        (data, status) => {
+            if (status == "success") {
+                try {
+                    let html = '<option value="-1">Select</option>';
+                    const intance = JSON.parse(data);
+                    intance.map((intance, i) => {
+                        html += '<option value="' + intance.id + '">' + intance.instance + '</option>';
+                    });
+                    $("#instance_add").html(html);
+                } catch (error) {
+                    updateTips(tips, error);
                 }
+            } else {
+                updateTips(tips, data);
             }
-        );
+        });
     });
 });
 /* This function will update the text in the tips div the the text and the css */
@@ -165,24 +168,25 @@ function update(contact) {
     $("#instance_old_id_upd").val(contact.instance_id);
     tips.addClass("alert-light");
     $("#instance_new_upd").html("<img src='assets/img/loader.gif' />");
-    $.post("api/api.php?action=fetchAllInstanceSelect", {},
-        (data, status) => {
-            if (status == "success") {
-                try {
-                    let html = '<option value="-1">Select</option>';
-                    const instances = JSON.parse(data);
-                    instances.map((instance, i) => {
-                        html += '<option value="' + instance.id + '">' + instance.instance + '</option>';
-                    });
-                    $("#instance_new_upd").html(html);
-                } catch (error) {
-                    updateTips(tips, error);
-                }
-            } else {
-                updateTips(tips, data);
+    $.post("api/api.php?action=fetchAllInstanceSelect", {
+        user_id: $("#logged_id").val()
+    },
+    (data, status) => {
+        if (status == "success") {
+            try {
+                let html = '<option value="-1">Select</option>';
+                const instances = JSON.parse(data);
+                instances.map((instance, i) => {
+                    html += '<option value="' + instance.id + '">' + instance.instance + '</option>';
+                });
+                $("#instance_new_upd").html(html);
+            } catch (error) {
+                updateTips(tips, error);
             }
+        } else {
+            updateTips(tips, data);
         }
-    );
+    });
     $("#updModal").modal("show");
 }
 

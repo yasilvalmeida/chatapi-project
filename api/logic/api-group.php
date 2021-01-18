@@ -2,67 +2,61 @@
     // Import the needed classes
     require_once("mysql_pdo.php");
     require_once("classes/group.php");
+    require_once("classes/group-select.php");
     // API for Group CRUD Class
     class GroupAPI {
         /* Retrieve all groups on the database */
         public function fetchAllGroup() {
             try {
-                // Select all groups
-                $query = "
-                        select tg.id, tg.name, tg.link, tg.chat_id, tg.instance_id, ti.instance, ti.token
-                        from tb_group tg
-                        join tb_instance ti on tg.instance_id = ti.id
-                        ";
-                // Create object to connect to MySQL using PDO
-                $mysqlPDO = new MySQLPDO();
-                // Prepare the query
-                $statement = $mysqlPDO->getConnection()->prepare($query);
-                // Execute the query without paramters
-                $statement->execute();
-                // Get affect rows in associative array
-                $rows = $statement->fetchAll();
-                // Foreach row in array
-                foreach ($rows as $row) {
-                    // Create a Group object
-                    $group = new Group($row);
-                    //Create datatable row
-                    $tmp_data[] = array(
-                        $group->getName(),
-                        $group->getInstance(),
-                        "<div style='text-align:center'><a href='group-contact.php?id=".$group->getId()."' class='btn btn-primary'><i class='far fa-address-book'></i></a></div>",
-                        "<div style='text-align:center'><a href='javascript:view(".json_encode($group).")' class='btn btn-warning'><i class='fas fa-eye'></i></a></div>",
-                        "<div style='text-align:center'><a href='javascript:remove(".json_encode($group).")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
-                    );
-                }
-                // Export into DataTable json format if there's any record in $tmp_data
-                if (isset($tmp_data) && count($tmp_data) > 0) {
-                    $data = array(
-                        "data" => $tmp_data
-                    );
-                } else {
-                    $data = array(
-                        "data" => array()
-                    );
-                }
-                return $data;
-            } catch (PDOException $e) {
-                die("Error message" . $e->getMessage());
-            }
-        }
-        /* Retrieve single group on the database */
-        public function fetchSingleGroup() {
-            try {
-                if (isset($_POST["group_id"])) {
-                    // Get the instance id from POST request to check
-                    $check_data = array(
-                        ':group_id' => $_POST["group_id"]
-                    );
+                if (!isset($_POST["user_id"])) {
                     // Select all groups
                     $query = "
                             select tg.id, tg.name, tg.link, tg.chat_id, tg.instance_id, ti.instance, ti.token
                             from tb_group tg
                             join tb_instance ti on tg.instance_id = ti.id
-                            where tg.id = :group_id
+                            ";
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query without paramters
+                    $statement->execute();
+                    // Get affect rows in associative array
+                    $rows = $statement->fetchAll();
+                    // Foreach row in array
+                    foreach ($rows as $row) {
+                        // Create a Group object
+                        $group = new Group($row);
+                        //Create datatable row
+                        $tmp_data[] = array(
+                            $group->getName(),
+                            $group->getInstance(),
+                            "<div style='text-align:center'><a href='group-contact.php?id=".$group->getId()."' class='btn btn-primary'><i class='far fa-address-book'></i></a></div>",
+                            "<div style='text-align:center'><a href='javascript:view(".json_encode($group).")' class='btn btn-warning'><i class='fas fa-eye'></i></a></div>",
+                            "<div style='text-align:center'><a href='javascript:remove(".json_encode($group).")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
+                        );
+                    }
+                    // Export into DataTable json format if there's any record in $tmp_data
+                    if (isset($tmp_data) && count($tmp_data) > 0) {
+                        $data = array(
+                            "data" => $tmp_data
+                        );
+                    } else {
+                        $data = array(
+                            "data" => array()
+                        );
+                    }
+                }
+                else {
+                    // Get the instance id from POST request to check
+                    $check_data = array(
+                        ':user_id' => $_POST["user_id"]
+                    );
+                    // Select all groups
+                    $query = "
+                            select tg.id, tg.name, tg.link, tg.chat_id, tg.instance_id, ti.instance, ti.token
+                            from tb_group tg
+                            join tb_instance ti on tg.instance_id = ti.id and ti.user_id = :user_id
                             ";
                     // Create object to connect to MySQL using PDO
                     $mysqlPDO = new MySQLPDO();
@@ -77,7 +71,151 @@
                         // Create a Group object
                         $group = new Group($row);
                         //Create datatable row
-                        $tmp_data[] = $group;
+                        $tmp_data[] = array(
+                            $group->getName(),
+                            $group->getInstance(),
+                            "<div style='text-align:center'><a href='group-contact.php?id=".$group->getId()."' class='btn btn-primary'><i class='far fa-address-book'></i></a></div>",
+                            "<div style='text-align:center'><a href='javascript:view(".json_encode($group).")' class='btn btn-warning'><i class='fas fa-eye'></i></a></div>",
+                            "<div style='text-align:center'><a href='javascript:remove(".json_encode($group).")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
+                        );
+                    }
+                    // Export into DataTable json format if there's any record in $tmp_data
+                    if (isset($tmp_data) && count($tmp_data) > 0) {
+                        $data = array(
+                            "data" => $tmp_data
+                        );
+                    } else {
+                        $data = array(
+                            "data" => array()
+                        );
+                    }
+                }
+                return $data;
+            } catch (PDOException $e) {
+                die("Error message" . $e->getMessage());
+            }
+        }
+        /* Retrieve single group on the database */
+        public function fetchSingleGroup() {
+            try {
+                if (isset($_POST["group_id"])) {
+                    if (!isset($_POST["user_id"])) {
+                        // Get the instance id from POST request to check
+                        $check_data = array(
+                            ':group_id' => $_POST["group_id"]
+                        );
+                        // Select all groups
+                        $query = "
+                                select tg.id, tg.name, tg.link, tg.chat_id, tg.instance_id, ti.instance, ti.token
+                                from tb_group tg
+                                join tb_instance ti on tg.instance_id = ti.id
+                                where tg.id = :group_id
+                                ";
+                        // Create object to connect to MySQL using PDO
+                        $mysqlPDO = new MySQLPDO();
+                        // Prepare the query
+                        $statement = $mysqlPDO->getConnection()->prepare($query);
+                        // Execute the query without paramters
+                        $statement->execute($check_data);
+                        // Get affect rows in associative array
+                        $rows = $statement->fetchAll();
+                        // Foreach row in array
+                        foreach ($rows as $row) {
+                            // Create a Group object
+                            $group = new Group($row);
+                            //Create datatable row
+                            $tmp_data[] = $group;
+                        }
+                        // Export into DataTable json format if there's any record in $tmp_data
+                        if (isset($tmp_data) && count($tmp_data) > 0) {
+                            $data = array(
+                                "data" => $tmp_data
+                            );
+                        } else {
+                            $data = array(
+                                "data" => array()
+                            );
+                        }
+                    }
+                    else {
+                        // Get the instance id from POST request to check
+                        $check_data = array(
+                            ':group_id' => $_POST["group_id"],
+                            ':user_id'  => $_POST["user_id"]
+                        );
+                        // Select all groups
+                        $query = "
+                                select tg.id, tg.name, tg.link, tg.chat_id, tg.instance_id, ti.instance, ti.token
+                                from tb_group tg
+                                join tb_instance ti on tg.instance_id = ti.id and ti.user_id = :user_id
+                                where tg.id = :group_id
+                                ";
+                        // Create object to connect to MySQL using PDO
+                        $mysqlPDO = new MySQLPDO();
+                        // Prepare the query
+                        $statement = $mysqlPDO->getConnection()->prepare($query);
+                        // Execute the query without paramters
+                        $statement->execute($check_data);
+                        // Get affect rows in associative array
+                        $rows = $statement->fetchAll();
+                        // Foreach row in array
+                        foreach ($rows as $row) {
+                            // Create a Group object
+                            $group = new Group($row);
+                            //Create datatable row
+                            $tmp_data[] = $group;
+                        }
+                        // Export into DataTable json format if there's any record in $tmp_data
+                        if (isset($tmp_data) && count($tmp_data) > 0) {
+                            $data = array(
+                                "data" => $tmp_data
+                            );
+                        } else {
+                            $data = array(
+                                "data" => array()
+                            );
+                        }
+                    }
+                }
+                else {
+                    $data[] = array('result' => 'Missing group#_id parameter!');
+                }
+                return $data;
+            } catch (PDOException $e) {
+                die("Error message" . $e->getMessage());
+            }
+        }
+        /* Retrieve all groups to select on the database */
+        public function fetchAllGroupSelect() {
+            try {
+                if (isset($_POST["instance_id"])) {
+                    // Get the name from POST request to check
+                    $check_data = array(
+                        ':instance_id' => $_POST["instance_id"]
+                    );
+                    // Select all groups
+                    $query = "
+                            select tg.id, tg.name, tg.chat_id
+                            from tb_group tg
+                            join tb_instance ti on tg.instance_id = ti.id and ti.id = :instance_id
+                            order by tg.name, tg.chat_id
+                            ";
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query without paramters
+                    $statement->execute($check_data);
+                    // Get affect rows in associative array
+                    $rows = $statement->fetchAll();
+                    // Foreach row in array
+                    foreach ($rows as $row) {
+                        // Create a Group Select object
+                        $groupSelect = new GroupSelect($row);
+                        if ($groupSelect->getChatId() != "") {
+                            //Create select row
+                            $tmp_data[] = $groupSelect;
+                        }
                     }
                     // Export into DataTable json format if there's any record in $tmp_data
                     if (isset($tmp_data) && count($tmp_data) > 0) {
@@ -91,7 +229,7 @@
                     }
                 }
                 else {
-                    $data[] = array('result' => 'Missing group#_id parameter!');
+                    $data[] = array('result' => 'Missing instance_id parameter');
                 }
                 return $data;
             } catch (PDOException $e) {

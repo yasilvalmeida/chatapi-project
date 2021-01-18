@@ -7,7 +7,9 @@ $(() => {
         ajax: {
             url: "api/api.php?action=fetchAllGroup",
             type: "POST",
-            data: {},
+            data: {
+                user_id: $("#logged_id").val()
+            },
         },
         oLanguage: {
             sSearch: "Search for <i class='fa fa-search'></i>",
@@ -61,8 +63,9 @@ $(() => {
 loadInstance = () => {
     var tips = $("#instance_add");
     tips.html("<img src='assets/img/loader.gif' />");
-    $.post("api/api.php?action=fetchAllInstanceSelect", 
-    {},
+    $.post("api/api.php?action=fetchAllInstanceSelect", {
+        user_id: $("#logged_id").val()
+    },
     (data, status) => {
         if (status == "success") {
             try {

@@ -141,9 +141,13 @@
         else if($_GET["action"] == 'fetchAllGroup') {
             $data = $grupotAPI->fetchAllGroup();
         }
-        // Perform fetch all groups 
+        // Perform fetch single group 
         else if($_GET["action"] == 'fetchSingleGroup') {
             $data = $grupotAPI->fetchSingleGroup();
+        }
+        // Perform fetch all group to select 
+        else if($_GET["action"] == 'fetchAllGroupSelect') {
+            $data = $grupotAPI->fetchAllGroupSelect();
         }
         // Perfom insert group action
         else if($_GET["action"] == 'insertGroup') {

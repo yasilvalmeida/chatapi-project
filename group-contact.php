@@ -75,6 +75,7 @@
         </div>
         <?php
             require("cmp/modal/group-contact.php");
+            require("cmp/modal/confirmation.php");
             require("cmp/script.php");
         ?>
         <script src="assets/js/group-contact.js"></script>

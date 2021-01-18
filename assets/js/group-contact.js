@@ -35,13 +35,17 @@ $(() => {
 });
 loadGroupInformation = () => {
     $.post("api/api.php?action=fetchSingleGroup", {
-        group_id: $("#group_id").val()
+        group_id: $("#group_id").val(),
+        user_id: $("#logged_id").val()
     },
     (data, status) => {
         if (status == "success") {
             try {
                 var result = JSON.parse(data);
                 group = result.data[0];
+                if (!group) {
+                    window.location.href = "group.php";
+                }
                 $("#title").html(group.name + " - Participants");
                 loadDataTable()
             } catch (error) {

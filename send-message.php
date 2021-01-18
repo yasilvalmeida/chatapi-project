@@ -4,7 +4,7 @@
     $access = $_SESSION[$_SESSION['views'].'access'];
     if ($access == 0) {
         header('Location: main.php');
-    } 
+    }
 ?>
 <html>
 
@@ -27,39 +27,60 @@
                         ?>
                         <div class="container-fluid">
                             <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                                <h3 class="text-dark mb-0">Send Message</h3>
+                                <h3 class="text-dark mb-0">Send New Message</h3>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addModal">
-                                                <i class="fa fa-envelope fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                Send New  Message
-                                            </a>
-                                            <!-- <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addModal">
-                                                <i class="fa fa-save fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                Import
-                                            </a> -->
-                                            <hr />
-                                            <table id="dataTable" class="table table-striped table-bordered table-hover display">
-                                                <thead>
-                                                    <tr>
-                                                    <th>Id</th>
-                                                        <th>Number</th>
-                                                        <th>Name</th>
-                                                        <th>Url</th>
-                                                        <th>Username</th>
-                                                        <th style="text-align: center;">
-                                                            <i class='fas fa-edit'> Update</i>
-                                                        </th>
-                                                        <th style="text-align: center;">
-                                                            <i class="far fa-trash-alt"> Delete</i>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
+                                            <form class="user">
+                                                <div class="form-group">
+                                                    <label>Instance</label>
+                                                    <select id='instance_snd' class='form-control'>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Message</label>
+                                                    <textarea id="message_snd" class="form-control" placeholder="Type a message">
+                                                    </textarea>
+                                                </div>
+                                                <hr />
+                                                <label for="image_snd" class="form-label">
+                                                    <img src="assets/img/camera.png" width="40" height="40">
+                                                </label>
+                                                <label for="movie_snd" class="form-label">
+                                                    <img src="assets/img/movie.png" width="40" height="40">
+                                                </label>
+                                                <label for="audio_snd" class="form-label">
+                                                    <img src="assets/img/audio.png" width="40" height="40">
+                                                </label>
+                                                <label for="pdf_snd" class="form-label">
+                                                    <img src="assets/img/pdf.png" width="43" height="40">
+                                                </label>
+                                                <input  id="file_snd" class="form-control" type="file" accept="image/*,application/pdf,audio/ogg,video/*" /><br>
+
+                                                <hr>
+                                                <center>
+                                                    <input type="radio" name="type" id="radio_contact" checked>&nbsp;Contact
+                                                    <input type="radio" name="type" id="radio_group">&nbsp;Group&nbsp;&nbsp;
+                                                </center>
+                                                
+                                                <div class="form-group">
+                                                    <select id='contact_snd' class='form-control' style="display:none;">
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <select id='group_snd' class='form-control' style="display:none;">
+                                                    </select>
+                                                </div>
+
+                                                <div id="send_state" class="d-flex justify-content-center" role="alert">
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="card-footer">
+                                            <a class="btn btn-success" href="javascript:send()">Send</a>
                                         </div>
                                         <!-- /.card-body -->
                                     </div>
@@ -77,7 +98,7 @@
             </a>
         </div>
         <?php
-                require("cmp/modal/send-message.php");
+            require("cmp/modal/confirmation.php");
             require("cmp/script.php");
         ?>
         <script src="assets/js/send-message.js"></script>

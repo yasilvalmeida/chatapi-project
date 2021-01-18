@@ -1,5 +1,5 @@
 <?php
-    // Instance class
+    // Group class
     class Group implements JsonSerializable {
         private $id;
         private $name;
@@ -19,8 +19,6 @@
             $this->instance    = $data['instance'];
             $this->token       = $data['token'];
             $this->instance_id = $data['instance_id'];
-        
-            
         }
         // Get Id
         function getId() {
