@@ -51,18 +51,18 @@ $(() => {
         }
     };
     $("#addModal").on("show.bs.modal", () => {
-        var tips = $("#url_add");
+        var tips = $("#instance_add");
         tips.html("<img src='assets/img/loader.gif' />");
-        $.post("api/api.php?action=fetchAllUrlSelect", {},
+        $.post("api/api.php?action=fetchAllInstanceSelect", {},
             (data, status) => {
                 if (status == "success") {
                     try {
                         let html = '<option value="-1">Select</option>';
                         const intance = JSON.parse(data);
                         intance.map((intance, i) => {
-                            html += '<option value="' + intance.id + '">' + intance.url + '</option>';
+                            html += '<option value="' + intance.id + '">' + intance.instance + '</option>';
                         });
-                        $("#url_add").html(html);
+                        $("#instance_add").html(html);
                     } catch (error) {
                         updateTips(tips, error);
                     }
@@ -106,19 +106,19 @@ checkRegexp = (o, regexp, n, tips) => {
 
 function insert() {
     var name_add = $("#name_add"),
-        number_add = $("#number_add"),
-        url_id = $("#url_add option:selected").val(),
+        phone_add = $("#phone_add"),
+        instance_id = $("#instance_add option:selected").val(),
         tips = $("#insert_state");
     tips.removeClass("alert-danger").addClass("alert-light");
-    if (url_id == -1) {
-        updateTips(tips, "Please select a url of token");
-        url_id.focus();
-    } else if (name_add.val() == "") {
+    if (name_add.val() == "") {
         updateTips(tips, "Please fill in the name");
         name_add.focus();
-    } else if (number_add.val() == "") {
-        updateTips(tips, "Please fill in the number");
-        number_add.focus();
+    } else if (phone_add.val() == "") {
+        updateTips(tips, "Please fill in the phone");
+        phone_add.focus();
+    } else if (instance_id == -1) {
+        updateTips(tips, "Please select a instance");
+        instance_id.focus();
     } else {
         insertAsync();
     }
@@ -126,71 +126,55 @@ function insert() {
 
 function insertAsync() {
     var tips = $("#insert_state");
-    var url = $("#url_add option:selected").val();
-    if (url == undefined) {
-        updateTips(tips, "Please select the url first!");
-    } else {
-        tips.addClass("alert-light");
-        tips.html("<img src='assets/img/loader.gif' />");
-        $.post("api/api.php?action=insertContact", {
-                number: $("#number_add").val(),
-                name: $("#name_add").val(),
-                instance_id: url
-            },
-            (data, status) => {
-                if (status == "success") {
-                    try {
-                        var r = JSON.parse(data);
-                        if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                            tips.html("Successfully registered");
-                            $("#addModal").modal("hide");
-                            clear_form();
-                            instance_data_table.ajax.reload();
-                        } else {
-                            updateTips(tips, r.result);
-                        }
-                    } catch (error) {
-                        updateTips(tips, error);
-                    }
+    var instance_id = $("#instance_add option:selected").val();
+    tips.addClass("alert-light");
+    tips.html("<img src='assets/img/loader.gif' />");
+    $.post("api/api.php?action=insertContact", 
+    {
+        phone: $("#phone_add").val(),
+        name: $("#name_add").val(),
+        instance_id: instance_id
+    },
+    (data, status) => {
+        if (status == "success") {
+            try {
+                var r = JSON.parse(data);
+                if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
+                    tips.html("Successfully registered");
+                    $("#addModal").modal("hide");
+                    clear_form();
+                    instance_data_table.ajax.reload();
                 } else {
-                    updateTips(tips, data);
+                    updateTips(tips, r.result);
                 }
+            } catch (error) {
+                updateTips(tips, error);
             }
-        );
-    }
+        } else {
+            updateTips(tips, data);
+        }
+    });
 }
 
 function update(contact) {
     var tips = $("#update_state");
     $("#id_upd").val(contact.id);
     $("#name_upd").val(contact.name);
-    $("#number_upd").val(contact.number);
+    $("#phone_upd").val(contact.phone);
+    $("#instance_old_upd").val(contact.instance);
+    $("#instance_old_id_upd").val(contact.instance_id);
     tips.addClass("alert-light");
-    $("#updModal").modal("show");
-}
-
-function updateAsync() {
-    var tips = $("#update_state");
-    tips.addClass("alert-light");
-    tips.html("<img src='assets/img/loader.gif' />");
-    $.post(
-        "api/api.php?action=updateContact", {
-            id: $("#id_upd").val(),
-            name: $("#name_upd").val(),
-            number: $("#number_upd").val(),
-        },
+    $("#instance_new_upd").html("<img src='assets/img/loader.gif' />");
+    $.post("api/api.php?action=fetchAllInstanceSelect", {},
         (data, status) => {
             if (status == "success") {
                 try {
-                    var r = JSON.parse(data);
-                    if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                        tips.html("I successfully altered!");
-                        $("#updModal").modal("hide");
-                        clear_form();
-                        instance_data_table.ajax.reload();
-                    } else {
-                        updateTips(tips, r.result);
-                    }
+                    let html = '<option value="-1">Select</option>';
+                    const instances = JSON.parse(data);
+                    instances.map((instance, i) => {
+                        html += '<option value="' + instance.id + '">' + instance.instance + '</option>';
+                    });
+                    $("#instance_new_upd").html(html);
                 } catch (error) {
                     updateTips(tips, error);
                 }
@@ -199,6 +183,46 @@ function updateAsync() {
             }
         }
     );
+    $("#updModal").modal("show");
+}
+
+function updateAsync() {
+    var instance_new = $("#instance_new_upd option:selected").val();
+    var instance_id;
+    if (instance_new == -1) {
+        instance_id = $("#instance_old_id_upd").val();
+    } else {
+        instance_id = instance_new;
+    }
+    var tips = $("#update_state");
+    tips.addClass("alert-light");
+    tips.html("<img src='assets/img/loader.gif' />");
+    $.post("api/api.php?action=updateContact", 
+    {
+        id: $("#id_upd").val(),
+        name: $("#name_upd").val(),
+        phone: $("#phone_upd").val(),
+        instance_id: instance_id
+    },
+    (data, status) => {
+        if (status == "success") {
+            try {
+                var r = JSON.parse(data);
+                if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
+                    tips.html("Successfully updated!");
+                    $("#updModal").modal("hide");
+                    clear_form();
+                    instance_data_table.ajax.reload();
+                } else {
+                    updateTips(tips, r.result);
+                }
+            } catch (error) {
+                updateTips(tips, error);
+            }
+        } else {
+            updateTips(tips, data);
+        }
+    });
 }
 
 function remove(id) {
@@ -241,15 +265,15 @@ function removeAsync() {
 // Reset all input form
 function clear_form() {
     /* Insert */
-    $("#url_add").val("");
+    $("#instance_add").val("");
     $("#name_add").val("");
-    $("#number_add").val("");
+    $("#phone_add").val("");
     $("#insert_state").removeClass("alert-success");
     $("#insert_state").addClass("alert-light");
     $("#insert_state").html("");
     /* Update */
-    $("#token_upd").val("");
-    $("#password_upd").val("");
+    $("#name_upd").val("");
+    $("#phone_upd").val("");
     $("#update_state").removeClass("alert-success");
     $("#update_state").addClass("alert-light");
     $("#update_state").html("");

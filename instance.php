@@ -41,15 +41,14 @@
                                             <table id="dataTable" class="table table-striped table-bordered table-hover display">
                                                 <thead>
                                                     <tr>
-                                                       <th>Id</th>
-                                                        <th>URL</th>
+                                                        <th>Instance</th>
                                                         <th>Token</th>
                                                         <th>Username</th>
                                                         <th style="text-align: center;">
-                                                            <i class='fas fa-edit'> Update</i>
+                                                            <i class='fas fa-edit'></i>
                                                         </th>
                                                         <th style="text-align: center;">
-                                                            <i class="far fa-trash-alt"> Delete</i>
+                                                            <i class="far fa-trash-alt"></i>
                                                         </th>
                                                     </tr>
                                                 </thead>

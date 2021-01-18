@@ -3,7 +3,7 @@
         <button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button">
             <i class="fas fa-bars"></i>
         </button>
-        <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <!-- <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
                 <input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
                 <div class="input-group-append">
@@ -12,7 +12,7 @@
                     </button>
                 </div>
             </div>
-        </form>
+        </form> -->
         <ul class="nav navbar-nav flex-nowrap ml-auto">
             <li class="nav-item dropdown d-sm-none no-arrow">
                 <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#">

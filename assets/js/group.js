@@ -36,7 +36,7 @@ $(() => {
             o.focus();
             updateTips(
                 tips,
-                "The length of" + n + " must be between " + min + " and " + max + "."
+                "The length of " + n + " must be between " + min + " and " + max + "."
             );
             return false;
         } else {
@@ -54,28 +54,32 @@ $(() => {
         }
     };
     $("#addModal").on("show.bs.modal", () => {
-        var tips = $("#url_add");
-        tips.html("<img src='assets/img/loader.gif' />");
-        $.post("api/api.php?action=fetchAllUrlSelect", {},
-            (data, status) => {
-                if (status == "success") {
-                    try {
-                        let html = '<option value="-1">Select</option>';
-                        const intance = JSON.parse(data);
-                        intance.map((intance, i) => {
-                            html += '<option value="' + intance.id + '">' + intance.url + '</option>';
-                        });
-                        $("#url_add").html(html);
-                    } catch (error) {
-                        updateTips(tips, error);
-                    }
-                } else {
-                    updateTips(tips, data);
-                }
-            }
-        );
+        loadInstance();
     });
 });
+// Load instances
+loadInstance = () => {
+    var tips = $("#instance_add");
+    tips.html("<img src='assets/img/loader.gif' />");
+    $.post("api/api.php?action=fetchAllInstanceSelect", 
+    {},
+    (data, status) => {
+        if (status == "success") {
+            try {
+                let html = '';
+                const instances = JSON.parse(data);
+                instances.map((instance, i) => {
+                    html += '<option value="' + instance.id + '">' + instance.instance + " " + instance.token + '</option>';
+                });
+                $("#instance_add").html(html);
+            } catch (error) {
+                updateTips(tips, error);
+            }
+        } else {
+            updateTips(tips, data);
+        }
+    });
+};
 /* This function will update the text in the tips div the the text and the css */
 updateTips = (tips, t) => {
     tips.html(t).addClass("alert-danger");
@@ -108,139 +112,122 @@ checkRegexp = (o, regexp, n, tips) => {
 };
 
 function insert() {
-    var name_group = $("#name_group"),
-        url_id = $("#url_add option:selected").val(),
-        tips = $("#insert_state");
+    var name = $("#name_add"),
+        instance_id = $("#instance_add option:selected").val(),
+        tips = $("#insert_state"),
+        bValid = true;
     tips.removeClass("alert-danger").addClass("alert-light");
-    if (name_group.val() == "") {
-        updateTips(tips, "Please fill in the name of group");
-        name_group.focus();
-    } else if (url_id == -1) {
-        updateTips(tips, "Please fill select one url for group");
+    if (name.val() == "") {
+        updateTips(tips, "Please fill in the name");
+        name.focus();
+    } 
+    else if (!checkLength(name, "name", 10, 250, tips)) { }
+    else if (instance_id == -1) {
+        updateTips(tips, "Please select one instance");
     } else {
         insertAsync();
     }
 }
 
 function insertAsync() {
-    var tips = $("#insert_state");
-    var url_id = $("#url_add option:selected").val();
-    if (url_id == undefined) {
-        updateTips(tips, "Please select the url !");
-    } else {
-        tips.addClass("alert-light");
-        tips.html("<img src='assets/img/loader.gif' />");
-        $.post("api/api.php?action=insertGroup", {
-                name_group: $("#name_group").val(),
-                instance_id: url_id,
-            },
-            (data, status) => {
-                alert(data)
-                if (status == "success") {
-                    try {
-                        var r = JSON.parse(data);
-                        if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                            tips.html("Successfully registered");
-                            $("#addModal").modal("hide");
-                            clear_form();
-                            group_data_table.ajax.reload();
-                        } else {
-
-                            updateTips(tips, r.result);
-                        }
-                    } catch (error) {
-                        updateTips(tips, error);
-                    }
-                } else {
-                    updateTips(tips, data);
-                }
-            }
-        );
-    }
-}
-
-function update(contact) {
-    var tips = $("#update_state");
-    $("#id_upd").val(contact.id);
-    $("#name_upd").val(contact.name);
-    $("#number_upd").val(contact.number);
-    tips.addClass("alert-light");
-    $("#updModal").modal("show");
-}
-
-function updateAsync() {
-    var tips = $("#update_state");
+    var tips = $("#insert_state"),
+        instance_id = $("#instance_add option:selected").val(),
+        instance = $("#instance_add option:selected").text().split(" ")[0],
+        token = $("#instance_add option:selected").text().split(" ")[1];
     tips.addClass("alert-light");
     tips.html("<img src='assets/img/loader.gif' />");
-    $.post(
-        "api/api.php?action=updateContact", {
-            id: $("#id_upd").val(),
-            name: $("#name_upd").val(),
-            number: $("#number_upd").val(),
-        },
-        (data, status) => {
-            if (status == "success") {
-                try {
-                    var r = JSON.parse(data);
-                    if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                        tips.html("I successfully altered!");
-                        $("#updModal").modal("hide");
-                        clear_form();
-                        group_data_table.ajax.reload();
-                    } else {
-                        updateTips(tips, r.result);
-                    }
-                } catch (error) {
-                    updateTips(tips, error);
+    $.post("api/api.php?action=insertGroup", {
+        name: $("#name_add").val(),
+        link: "",
+        chat_id: "",
+        instance_id: instance_id
+    },
+    (data, status) => {
+        if (status == "success") {
+            try {
+                var r = JSON.parse(data);
+                if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
+                    tips.html("Successfully registered");
+                    $("#addModal").modal("hide");
+                    clear_form();
+                    group_data_table.ajax.reload();
+                } else {
+
+                    updateTips(tips, r.result);
                 }
-            } else {
-                updateTips(tips, data);
+            } catch (error) {
+                updateTips(tips, error);
             }
+        } else {
+            updateTips(tips, data);
         }
-    );
+    });
 }
 
-function remove(id) {
+function view(group) {
+    $("#name_viw").val(group.name);
+    $("#link_viw").val(group.link);
+    $("#chat_id_viw").val(group.chat_id);
+    $("#instance_viw").val(group.instance);
+    $("#viwModal").modal("show");
+}
+
+function remove(group) {
     var tips = $("#remove_state");
-    $("#delModalBody").html("<p>Do you want to delete this record?</p><input id='id_del' type='hidden' /><div id='remove_state' class='d-flex justify-content-center' role='alert'></div >");
-    $("#id_del").val(id);
+    $("#delModalBody").html("<p>Do you want to delete this record?</p><input id='id_del' type='hidden' /><input id='chat_id_del' type='hidden' /><input id='instance_del' type='hidden' /><input id='token_del' type='hidden' /><div id='remove_state' class='d-flex justify-content-center' role='alert'></div >");
+    $("#id_del").val(group.id);
+    $("#chat_id_del").val(group.chat_id);
+    $("#instance_del").val(group.instance);
+    $("#token_del").val(group.token);
     tips.addClass("alert-light");
     $("#delModal").modal("show");
 }
 
 function removeAsync() {
-    var tips = $("#remove_state");
+    var tips = $("#remove_state"),
+        id = $("#id_del").val(),
+        chat_id = $("#chat_id_del").val(),
+        instance = $("#instance_del").val(),
+        token = $("#token_del").val();
     tips.addClass("alert-light");
     tips.html("<img src='assets/img/loader.gif' />");
-    $.post(
-        "api/api.php?action=removeContact", {
-            id: $("#id_del").val(),
-        },
-        (data, status) => {
-            if (status == "success") {
-                try {
-                    var r = JSON.parse(data);
-                    if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                        tips.html("Successfully removed!");
-                        $("#delModal").modal("hide");
-                        clear_form();
-                        group_data_table.ajax.reload();
-                    } else {
-                        updateTips(tips, r.result);
-                    }
-                } catch (error) {
-                    updateTips(tips, error);
+    $.post("api/api.php?action=removeGroup", {
+        id: id
+    },
+    (data, status) => {
+        if (status == "success") {
+            try {
+                var r = JSON.parse(data);
+                if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
+                    tips.html("Successfully removed!");
+                    $("#delModal").modal("hide");
+                    clear_form();
+                    $.post(`https://api.chat-api.com/instance${instance}/removeChat?token=${token}`, {
+                        chatId: chat_id
+                    }, 
+                    (data, status) => {
+                        if (status == "success") {
+                            group_data_table.ajax.reload();
+                        }
+                        else {
+                            updateTips(tips, data);
+                        }
+                    });
+                } else {
+                    updateTips(tips, r.result);
                 }
-            } else {
-                updateTips(tips, data);
+            } catch (error) {
+                updateTips(tips, error);
             }
+        } else {
+            updateTips(tips, data);
         }
-    );
+    });
 }
 // Reset all input form
 function clear_form() {
     /* Insert */
-    $("#url_add").val("");
+    $("#instance_add").val("");
     $("#name_add").val("");
     $("#number_add").val("");
     $("#insert_state").removeClass("alert-success");

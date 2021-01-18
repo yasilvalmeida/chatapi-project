@@ -1,19 +1,18 @@
 <?php
-    // Instance class
-    class Gruop_Contact implements JsonSerializable {
+    // Group Contact class
+    class GroupContact implements JsonSerializable {
         private $id;
         private $name;
-        private $contact;
+        private $phone;
         private $status;
-
         /* 
         This constructor create a new user object
         */
         function __construct(array $data) {
-            $this->id        = $data['id'];
-            $this->name      = $data['name'];
-            $this->contact   = $data['contact'];
-            $this->status       = $data['status'];
+            $this->id     = $data['id'];
+            $this->name   = $data['name'];
+            $this->phone  = $data['phone'];
+            $this->status = $data['status'];
         }
         // Get Id
         function getId() {
@@ -23,12 +22,11 @@
         function getName() {
             return $this->name;
         }
- 
-        //get nunber
-        function getContact() {
-            return $this->contact;
+        // Get Phone
+        function getPhone() {
+            return $this->phone;
         }
-        //get url
+        // Get Status
         function getStatus() {
             return $this->status;
         }
@@ -37,3 +35,4 @@
             return get_object_vars($this);
         }
     }
+?>

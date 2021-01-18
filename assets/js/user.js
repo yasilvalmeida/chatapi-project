@@ -228,7 +228,7 @@ function updateAsync() {
                     try {
                         var r = JSON.parse(data);
                         if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                            tips.html("I successfully altered!");
+                            tips.html("Successfully updated!");
                             $("#updModal").modal("hide");
                             clear_form();
                             user_data_table.ajax.reload();

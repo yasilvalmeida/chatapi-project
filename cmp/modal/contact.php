@@ -4,7 +4,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Insert new conctact</h5>
+                <h5 class="modal-title">Insert new contact</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -12,17 +12,15 @@
             <div class="modal-body">
                 <form class="user">
                     <div class="form-group">
-                        <label>Url of token</label>
-                        <select id='url_add' class='form-control'>
+                        <input id="name_add" type="text" class="form-control form-control" placeholder="Name" />
+                    </div>
+                    <div class="form-group">
+                        <input id="phone_add" type="text" class="form-control form-control" placeholder="Phone number" />
+                    </div>
+                    <div class="form-group">
+                        <label for="instance_add">Instance</label>
+                        <select id='instance_add' class='form-control'>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input id="name_add" type="text" class="form-control form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label>Number</label>
-                        <input id="number_add" type="text" class="form-control form-control"/>
                     </div>
                     <hr/>
                     <div id="insert_state" class="d-flex justify-content-center"  role="alert">
@@ -56,8 +54,18 @@
                         <input id="name_upd" type="text" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                        <label>Number </label>
-                        <input id="number_upd" type="text" class="form-control form-control" />
+                        <label>Phone </label>
+                        <input id="phone_upd" type="text" class="form-control form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Old Instance</label>
+                        <input id="instance_old_upd" disabled type="text" class="form-control form-control" />
+                        <input id="instance_old_id_upd" type="hidden" class="form-control form-control" />
+                    </div>
+                    <div class="form-group">
+                    <label>New Instance</label>
+                        <select id='instance_new_upd' class='form-control'>
+                        </select>
                     </div>
                     <hr />
                     <div id="update_state"  class="d-flex justify-content-center" role="alert"></div>
@@ -75,7 +83,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete contact</h5>
+                <h5 class="modal-title">Remove contact</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

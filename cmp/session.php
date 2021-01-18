@@ -2,12 +2,10 @@
     // Inialize session
     session_start();
     // Check
-    if (isset($_SESSION) && $_SESSION['views'] == 0)
-    {
-            header('Location: index.php');
+    if (isset($_SESSION) && $_SESSION['views'] == 0) {
+        header('Location: index.php');
     }
-    else
-    {
+    else {
         // Load user information from $_SESSION
         $id = $_SESSION[$_SESSION['views'].'id'];
         $username = $_SESSION[$_SESSION['views'].'username'];

@@ -1,50 +1,58 @@
 <?php
     // Import the needed classes
     require_once("mysql_pdo.php");
-    require_once("classes/contact.php");
-    // API for User CRUD Class
-    class contactAPI {
-        /* User Actions Begin */
-        /* Retrieve all instances on the database */
-        public function fetchAllContact() {
+    // API for Dashboard CRUD Class
+    class DashboardAPI {
+        /* Dashboard Actions Begin */
+        /* Retrieve user counts on the database */
+        public function dashboard() {
             try {
-                // Select all users
-                $query = "select * from
-                          tb_instance ti , tb_user tu , tb_contact tc
-                          where ti.user_id=tu.id AND ti.id=tc.instance_id 
-                          ORDER by username asc";
-                // Create object to connect to MySQL using PDO
-                $mysqlPDO = new MySQLPDO();
-                // Prepare the query
-                $statement = $mysqlPDO->getConnection()->prepare($query);
-                // Execute the query without paramters
-                $statement->execute();
-                // Get affect rows in associative array
-                $rows = $statement->fetchAll();
-                // Foreach row in array
-                foreach ($rows as $row) {
-                    // Create a Instance object
-                    $contact = new Contact($row);
-                    //Create datatable row
-                    $tmp_data[] = array(
-                        $contact->getId(),
-                        $contact->getNamber(),
-                        $contact->getName(),
-                        $contact->getUrl(),
-                        $contact->getUsermane(),
-                        "<div class='span12' style='text-align:center'><a href='javascript:update(".json_encode($contact).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
-                        "<div class='span12' style='text-align:center'><a href='javascript:remove(".$contact->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
+                if (isset($_POST["type"])) {
+                    $type = $_POST["type"];
+                    switch($type) {
+                        case "user":
+                            // Count all users
+                            $query = "
+                                    select count(*) as total from
+                                    tb_user
+                                    ";
+                            break;
+                        case "instance":
+                            // Count all instances
+                            $query = "
+                                    select count(*) as total from
+                                    tb_instance
+                                    ";
+                            break;
+                        case "contact":
+                            // Count all contacts
+                            $query = "
+                                    select count(*) as total from
+                                    tb_contact
+                                    ";
+                            break;
+                        case "group":
+                            // Count all groups
+                            $query = "
+                                    select count(*) as total from
+                                    tb_group
+                                    ";
+                            break;
+                    }
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query without paramters
+                    $statement->execute();
+                    // Get affect rows in associative array
+                    $rows = $statement->fetchAll();
+                    $data = array(
+                        "data" => $rows[0]
                     );
                 }
-                // Export into DataTable json format if there's any record in $tmp_data
-                if (isset($tmp_data) && count($tmp_data) > 0) {
-                    $data = array(
-                        "data" => $tmp_data
-                    );
-                } else {
-                    $data = array(
-                        "data" => array()
-                    );
+                else {
+                    $data[] = array('result' => 'Missing instance parameter!');
                 }
                 return $data;
             } catch (PDOException $e) {
@@ -85,7 +93,8 @@
                     } else {
                         // Create a SQL query to insert an new instance with a new token, password and access
                         $query = "
-                                 insert  tb_contact(number, name ,instance_id)values(:number_add, :name_add, :url_id);
+                                insert tb_contact(number, name, instance_id)
+                                values (:number_add, :name_add, :url_id);
                                 ";
                         // Prepare the query
                         $statement = $mysqlPDO->getConnection()->prepare($query);

@@ -41,17 +41,16 @@
                                             <table id="dataTable" class="table table-striped table-bordered table-hover display">
                                                 <thead>
                                                     <tr>
-                                                   
-                                                        <th>ID_group</th>
                                                         <th>Name</th>
                                                         <th>Instance</th>
-                                                      
-                                                       
                                                         <th style="text-align: center;">
-                                                        <i class="fas fa-id-card-alt"></i> Contact</i>
+                                                            <i class="far fa-address-book"></i>
                                                         </th>
                                                         <th style="text-align: center;">
-                                                            <i class="far fa-trash-alt"> Delete</i>
+                                                            <i class="fas fa-eye"></i></i>
+                                                        </th>
+                                                        <th style="text-align: center;">
+                                                            <i class="far fa-trash-alt"></i>
                                                         </th>
                                                     </tr>
                                                 </thead>

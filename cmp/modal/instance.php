@@ -12,14 +12,14 @@
             <div class="modal-body">
                 <form class="user">
                     <div class="form-group">
-                        <select id='user_add' class='form-control'>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input id="url_add" type="text" class="form-control form-control" placeholder="URL"/>
+                        <input id="instance_add" type="text" class="form-control form-control" placeholder="Instance"/>
                     </div>
                     <div class="form-group">
                         <input id="token_add" type="text" class="form-control form-control" placeholder="Token"/>
+                    </div>
+                    <div class="form-group">
+                        <select id='user_add' class='form-control'>
+                        </select>
                     </div>
                     <hr />
                     <div id="insert_state" class="d-flex justify-content-center"  role="alert">
@@ -49,21 +49,21 @@
                         <input id="id_upd" type="hidden" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                        <label>URL </label>
-                        <input id="url_upd" type="text" class="form-control form-control" />
+                        <label>Instance </label>
+                        <input id="instance_upd" type="text" class="form-control form-control" />
                     </div>
                     <div class="form-group">
                         <label>Token </label>
                         <input id="token_upd" type="text" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                        <label>Usermane Old </label>
-                        <input id="user_old" type="text" class="form-control form-control" />
-                        <input id="user_old_id" type="hidden" class="form-control form-control" />
+                        <label>Old Username</label>
+                        <input id="user_old_upd" disabled type="text" class="form-control form-control" />
+                        <input id="user_old_id_upd" type="hidden" class="form-control form-control" />
                     </div>
                     <div class="form-group">
-                    <label>New Usermane</label>
-                        <select id='user_new' class='form-control'>
+                    <label>New Username</label>
+                        <select id='user_new_upd' class='form-control'>
                         </select>
                     </div>
                     <hr />
@@ -83,7 +83,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete instance</h5>
+                <h5 class="modal-title">Remove instance</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

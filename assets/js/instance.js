@@ -105,21 +105,23 @@ checkRegexp = (o, regexp, n, tips) => {
 };
 
 function insert() {
-    var url_add = $("#url_add"),
+    var instance_add = $("#instance_add"),
         token_add = $("#token_add"),
         userId = $("#user_add option:selected").val(),
         tips = $("#insert_state");
     tips.removeClass("alert-danger").addClass("alert-light");
-    if (userId == -1) {
-        updateTips(tips, "Please select a user");
-        userId.focus();
-    } else if (url_add.val() == "") {
-        updateTips(tips, "Please fill in the url");
-        url_add.focus();
+    if (instance_add.val() == "") {
+        updateTips(tips, "Please fill in the instance");
+        instance_add.focus();
     } else if (token_add.val() == "") {
         updateTips(tips, "Please fill in the token");
         token_add.focus();
-    } else {
+    } 
+    else if (userId == -1) {
+        updateTips(tips, "Please select a user");
+        userId.focus();
+    } 
+    else {
         insertAsync();
     }
 }
@@ -127,49 +129,44 @@ function insert() {
 function insertAsync() {
     var tips = $("#insert_state");
     const userId = $("#user_add option:selected").val();
-
-    if (userId == undefined) {
-        updateTips(tips, "Please select the user first!");
-    } else {
-        tips.addClass("alert-light");
-        tips.html("<img src='assets/img/loader.gif' />");
-        $.post("api/api.php?action=insertInstance", {
-                url: $("#url_add").val(),
-                token: $("#token_add").val(),
-                user_id: userId
-            },
-            (data, status) => {
-                if (status == "success") {
-                    try {
-                        var r = JSON.parse(data);
-                        if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                            tips.html("Successfully registered");
-                            $("#addModal").modal("hide");
-                            clear_form();
-                            instance_data_table.ajax.reload();
-                        } else {
-                            updateTips(tips, r.result);
-                        }
-                    } catch (error) {
-                        updateTips(tips, error);
-                    }
+    tips.addClass("alert-light");
+    tips.html("<img src='assets/img/loader.gif' />");
+    $.post("api/api.php?action=insertInstance", 
+    {
+        instance: $("#instance_add").val(),
+        token: $("#token_add").val(),
+        user_id: userId
+    },
+    (data, status) => {
+        if (status == "success") {
+            try {
+                var r = JSON.parse(data);
+                if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
+                    tips.html("Successfully registered");
+                    $("#addModal").modal("hide");
+                    clear_form();
+                    instance_data_table.ajax.reload();
                 } else {
-                    updateTips(tips, data);
+                    updateTips(tips, r.result);
                 }
+            } catch (error) {
+                updateTips(tips, error);
             }
-        );
-    }
+        } else {
+            updateTips(tips, data);
+        }
+    });
 }
 
 function update(instance) {
     var tips = $("#update_state");
     $("#id_upd").val(instance.id);
-    $("#url_upd").val(instance.url);
+    $("#instance_upd").val(instance.instance);
     $("#token_upd").val(instance.token);
-    $("#user_old").val(instance.username);
-    $("#user_old_id").val(instance.user_id);
+    $("#user_old_upd").val(instance.username);
+    $("#user_old_id_upd").val(instance.user_id);
     tips.addClass("alert-light");
-    var tips = $("#user_new");
+    var tips = $("#user_new_upd");
     tips.html("<img src='assets/img/loader.gif' />");
     $.post("api/api.php?action=fetchAllUserSelect", {},
         (data, status) => {
@@ -180,7 +177,7 @@ function update(instance) {
                     users.map((user, i) => {
                         html += '<option value="' + user.id + '">' + user.username + '</option>';
                     });
-                    $("#user_new").html(html);
+                    tips.html(html);
                 } catch (error) {
                     updateTips(tips, error);
                 }
@@ -193,12 +190,12 @@ function update(instance) {
 }
 
 function updateAsync() {
-    var user_new = $("#user_new option:selected").val();
-    var user_nam = "";
+    var user_new = $("#user_new_upd option:selected").val();
+    var user_id;
     if (user_new == -1) {
-        user_nam = $("#user_old_id").val();
+        user_id = $("#user_old_id_upd").val();
     } else {
-        user_nam = user_new;
+        user_id = user_new;
     }
     var tips = $("#update_state");
     tips.addClass("alert-light");
@@ -206,16 +203,16 @@ function updateAsync() {
     $.post(
         "api/api.php?action=updateInstance", {
             id: $("#id_upd").val(),
-            url: $("#url_upd").val(),
+            instance: $("#instance_upd").val(),
             token: $("#token_upd").val(),
-            user_new_id: user_nam
+            user_id: user_id
         },
         (data, status) => {
             if (status == "success") {
                 try {
                     var r = JSON.parse(data);
                     if (parseInt(r.result) != NaN && parseInt(r.result) == 1) {
-                        tips.html("I successfully altered!");
+                        tips.html("Successfully updated!");
                         $("#updModal").modal("hide");
                         clear_form();
                         instance_data_table.ajax.reload();
@@ -272,7 +269,7 @@ function removeAsync() {
 // Reset all input form
 function clear_form() {
     /* Insert */
-    $("#url_add").val("");
+    $("#instance_add").val("");
     $("#token_add").val("");
     $("#insert_state").removeClass("alert-success");
     $("#insert_state").addClass("alert-light");

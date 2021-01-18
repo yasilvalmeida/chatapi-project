@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <?php
     require_once("cmp/session.php");
+    $access = $_SESSION[$_SESSION['views'].'access'];
+    if ($access == 0) {
+        header('Location: main.php');
+    } 
 ?>
 <html>
 
@@ -73,10 +77,10 @@
             </a>
         </div>
         <?php
-                require("cmp/modal/send_message.php");
+                require("cmp/modal/send-message.php");
             require("cmp/script.php");
         ?>
-        <script src="assets/js/send_message.js"></script>
+        <script src="assets/js/send-message.js"></script>
     </body>
 
 </html>

@@ -1,10 +1,11 @@
 <?php
     // Import the neeeded class
-    require_once('logic/api_user.php');
-    require_once('logic/api_instance.php');
-    require_once('logic/api_contact.php');
-    require_once('logic/api_group.php');
-    require_once('logic/api_contact_group.php');
+    require_once('logic/api-user.php');
+    require_once('logic/api-instance.php');
+    require_once('logic/api-contact.php');
+    require_once('logic/api-group.php');
+    require_once('logic/api-group-contact.php');
+    require_once('logic/api-dashboard.php');
 
     // Create session
     session_start();
@@ -17,62 +18,57 @@
         // Create a API for Instance CRUD
         $instanceAPI = new InstanceAPI();
         // Create a API for Contact CRUD
-        $contactAPI = new  contactAPI();
-         // Create a API for CroupAPI CRUD
-         $grupotAPI = new  GroupAPI();
-         $grupo_contactAPI = new  Group_ContactAPI();
+        $contactAPI = new  ContactAPI();
+        // Create a API for Group CRUD
+        $grupotAPI = new  GroupAPI();
+        // Create a API for Group Contact CRUD
+        $groupContactAPI = new  GroupContactAPI();
+        // Create a API for Dashboard CRUD
+        $dashboardAPI = new DashboardAPI();
 
         /**********************/
         
+        /* User Action Begin */
         // Perform login action
-        if($_GET["action"] == 'logIn')
-        {
+        if($_GET["action"] == 'logIn') {
             $data = $userAPI->logIn();
             $data = $data[0];
         }
         // Perform recover password action
-        else if($_GET["action"] == 'recoverPassword')
-        {
+        else if($_GET["action"] == 'recoverPassword') {
             $data = $userAPI->recoverPassword();
             $data = $data[0];
         }
-        /* User Actions Begin */
-        else if($_GET["action"] == 'logOut')
-        {
+        // Perform logout action
+        else if($_GET["action"] == 'logOut') {
             $data = $userAPI->logOut();
             $data = $data[0];
         }
         // Perform change logged user info action
-        else if($_GET["action"] == 'changeLoggedUserInfo')
-        {
+        else if($_GET["action"] == 'changeLoggedUserInfo') {
             $data = $userAPI->changeLoggedUserInfo();
             $data = $data[0];
         }
         // Perform fetch all users action
-        else if($_GET["action"] == 'fetchAllUser')
-        {
+        else if($_GET["action"] == 'fetchAllUser') {
             $data = $userAPI->fetchAllUser();
         }
         // Perform fetch all users to select action
-        else if($_GET["action"] == 'fetchAllUserSelect')
-        {
+        else if($_GET["action"] == 'fetchAllUserSelect') {
             $data = $userAPI->fetchAllUserSelect();
         }
         // Perform insert user action
-        else if($_GET["action"] == 'insertUser')
-        {
+        else if($_GET["action"] == 'insertUser') {
             $data = $userAPI->insertUser();
             $data = $data[0];
         }
         // Perform update user action
-        else if($_GET["action"] == 'updateUser')
-        {
+        else if($_GET["action"] == 'updateUser') {
             $data = $userAPI->updateUser();
             $data = $data[0];
         }
         // Perform remove user action
-        else if($_GET["action"] == 'removeUser')
-        {
+        else if($_GET["action"] == 'removeUser') {
             $data = $userAPI->removeUser();
             $data = $data[0];
         }
@@ -81,102 +77,117 @@
         /*************************/
 
         /* Instance Action Begin */
-
-        // Perform fetch all users action
-        else if($_GET["action"] == 'fetchAllInstance')
-        {
+        // Perform fetch all instances action
+        else if($_GET["action"] == 'fetchAllInstance') {
             $data = $instanceAPI->fetchAllInstance();
         }
-        // Perform insert user action
-        else if($_GET["action"] == 'insertInstance')
-        {
+        // Perform fetch all instances to select action
+        else if($_GET["action"] == 'fetchAllInstanceSelect') {
+            $data = $instanceAPI->fetchAllInstanceSelect();
+        }
+        // Perform insert instance action
+        else if($_GET["action"] == 'insertInstance') {
             $data = $instanceAPI->insertInstance();
             $data = $data[0];
         }
-        // Perform update user action
-        else if($_GET["action"] == 'updateInstance')
-        {
+        // Perform update instance action
+        else if($_GET["action"] == 'updateInstance') {
             $data = $instanceAPI->updateInstance();
             $data = $data[0];
         }
-        // Perform remove user action
-        else if($_GET["action"] == 'removeInstance')
-        {
+        // Perform remove instance action
+        else if($_GET["action"] == 'removeInstance') {
             $data = $instanceAPI->removeInstance();
             $data = $data[0];
         }
-
         /* Instance Action End */
 
         /***********************/
-/*Contact Action */
-        else if($_GET["action"] == 'fetchAllContact')
-        {
-            $data = $contactAPI->fetchAllContact();
-        }//
-        else if($_GET["action"] == 'fetchAllUrlSelect'){
-            $data = $instanceAPI->fetchAllUrlSelect();
-        }  else if($_GET["action"] == 'fetchAllUrlSelect'){
-            $data = $instanceAPI->fetchAllUrlSelect();
-        }
-        // select conatct
-        else if($_GET["action"] == 'fetchAllContactSelect'){
-            $data = $instanceAPI->fetchAllContactSelect();
-
-        }//URL Contac Select
-        else if($_GET["action"] == 'fetchAllInstanceContact'){
-            $data = $contactAPI->fetchAllContactInstance();
-
-        }
         
-        // Perfom Group action
-        else if($_GET["action"] == 'insertGroup')
-        {
-            $data = $grupotAPI->insertGroup();
-        } 
-         else if($_GET["action"] == 'fetchAllGroup')
-        {
-            $data = $grupotAPI->fetchAllGroup();
+        /* Contact Action Begin */
+        // Perform fetch all contacts action
+        else if($_GET["action"] == 'fetchAllContact') {
+            $data = $contactAPI->fetchAllContact();
         }
-        // contact group
-        else if($_GET["action"] == 'fetchAllGroupContact')
-        {
-            $data = $grupo_contactAPI->fetchAllGroup_contact();
+        // Perform fetch all contacts to select action
+        else if($_GET["action"] == 'fetchAllContactSelect') {
+            $data = $contactAPI->fetchAllContactSelect();
         }
-        //
-        else if($_GET["action"] == 'insertContact_group')
-        {
-            $data = $grupo_contactAPI->insertGroup_Contact();
+        // Perform fetch all contacts by instance to select action
+        else if($_GET["action"] == 'fetchAllContactByInstanceSelect') {
+            $data = $contactAPI->fetchAllContactByInstanceSelect();
         }
-         else if($_GET["action"] == 'removeContact_group')
-        {
-            $data = $grupo_contactAPI->removeContact_Group();
+        // Perform insert contact action
+        else if($_GET["action"] == 'insertContact') {
+            $data = $contactAPI->insertContact();
             $data = $data[0];
         }
-        else if($_GET["action"] == 'fetchAllInstanceGroup'){
-            $data = $grupo_contactAPI->fetchAllGrouptInstance();
-
-        }
-        // Perform insert user action
-        else if($_GET["action"] == 'insertContact')
-        {
-            $data = $contactAPI->insertConctact();
-            $data = $data[0];
-        }
-        // Perform update user action
-        else if($_GET["action"] == 'updateContact')
-        {
+        // Perform update contact action
+        else if($_GET["action"] == 'updateContact') {
             $data = $contactAPI->updateContact();
             $data = $data[0];
         }
-        // Perform remove user action
-        else if($_GET["action"] == 'removeContact')
-        {
+        // Perform remove contact action
+        else if($_GET["action"] == 'removeContact') {
             $data = $contactAPI->removeContact();
             $data = $data[0];
         } 
-        
+        /* Contact Action Begin */
 
+        /************************/
+        
+        /* Group Action Begin */
+        // Perform fetch all groups 
+        else if($_GET["action"] == 'fetchAllGroup') {
+            $data = $grupotAPI->fetchAllGroup();
+        }
+        // Perform fetch all groups 
+        else if($_GET["action"] == 'fetchSingleGroup') {
+            $data = $grupotAPI->fetchSingleGroup();
+        }
+        // Perfom insert group action
+        else if($_GET["action"] == 'insertGroup') {
+            $data = $grupotAPI->insertGroup();
+            $data = $data[0];
+        }
+        // Perfom update group action
+        else if($_GET["action"] == 'updateGroup') {
+            $data = $grupotAPI->updateGroup();
+            $data = $data[0];
+        }
+        // Perfom remove group action
+        else if($_GET["action"] == 'removeGroup') {
+            $data = $grupotAPI->removeGroup();
+            $data = $data[0];
+        }
+        /* Group Action End */
+
+        /************************/
+
+        /* Group Contact Action Begin */
+        // Perform fetch all contacts by group action
+        else if($_GET["action"] == 'fetchAllGroupContact') {
+            $data = $groupContactAPI->fetchAllGroupContact();
+        }
+        // Perform insert group contact action
+        else if($_GET["action"] == 'insertGroupContact') {
+            $data = $groupContactAPI->insertGroupContact();
+            $data = $data[0];
+        }
+        // Perform remove group contact action
+        else if($_GET["action"] == 'removeGroupContact') {
+            $data = $groupContactAPI->removeGroupContact();
+            $data = $data[0];
+        }
+        /* Contact Action Begin */
+
+        /************************/
+
+        /* Dashboard Action Begin */
+        else if($_GET["action"] == 'dashboard') {
+            $data = $dashboardAPI->dashboard();
+        }
+        /* Dashboard Action End */
 
         // No action to perform
         else

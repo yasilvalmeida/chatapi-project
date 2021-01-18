@@ -2,6 +2,7 @@
     // Import the needed classes
     require_once("mysql_pdo.php");
     require_once("classes/user.php");
+    require_once("classes/user-select.php");
     // API for User CRUD Class
     class UserAPI {
         /* User Actions Begin */
@@ -66,8 +67,7 @@
             }
         }
         /* Do the recover */
-        public function recoverPassword()
-        {
+        public function recoverPassword() {
             try {
                 /* Check if for the empty or null email parameters */
                 if (isset($_POST["email"])) {
@@ -174,10 +174,10 @@
                 if (isset($_POST["id"]) && isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["email"])) {
                     // Get the id, username and password parameters from POST request
                     $form_data = array(
-                        ':id'        => $_POST["id"],
-                        ':username'  => $_POST["username"],
-                        ':password'  => $_POST["password"],
-                        ':email'     => $_POST["email"]
+                        ':id'       => $_POST["id"],
+                        ':username' => $_POST["username"],
+                        ':password' => $_POST["password"],
+                        ':email'    => $_POST["email"]
                     );
                     // Check for existent data in Database
                     $query = "
@@ -198,7 +198,9 @@
                         // Create a SQL query to update the existent user with a new username and password for this passed id
                         $query = "
                                 update tb_user
-                                set username = :username, password = :password, email = :email
+                                set username = :username, 
+                                    password = :password, 
+                                    email = :email
                                 where id = :id
                                 ";
                         // Prepare the query
@@ -207,8 +209,6 @@
                         $statement->execute($form_data);
                         // Check if any affected row
                         if ($statement->rowCount()) {
-                            // Create session
-                            //session_start();
                             // Check for open session
                             if (isset($_SESSION['views'])) {
                                 // Update new logged user info into session
@@ -251,7 +251,10 @@
         public function fetchAllUser() {
             try {
                 // Select all users
-                $query = "select * from tb_user where state = 1";
+                $query = "
+                        select * 
+                        from tb_user 
+                        ";
                 // Create object to connect to MySQL using PDO
                 $mysqlPDO = new MySQLPDO();
                 // Prepare the query
@@ -269,10 +272,10 @@
                         $user->getEmail(),
                         $user->getUsername(),
                         "********",
-                        $user->getAccess(),
-                        $user->getState(),
-                        "<div class='span12' style='text-align:center'><a href='javascript:update(".json_encode($user).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
-                        "<div class='span12' style='text-align:center'><a href='javascript:remove(".$user->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
+                        "<div style='text-align:center'>".$user->getAccess()."</div>",
+                        $user->getState() == "0" ? '<div style="text-align:center"><i class="fas fa-times" style="color:red"></i></div>' : '<div style="text-align:center"><i class="fas fa-check" style="text-align: center; color:green;"></i></div>',
+                        "<div style='text-align:center'><a href='javascript:update(".json_encode($user).")' class='btn btn-info'><i class='fas fa-edit'></i></a></div>",
+                        "<div style='text-align:center'><a href='javascript:remove(".$user->getId().")' class='btn btn-danger'><i class='far fa-trash-alt'></i></a></div>"
                     );
                 }
                 // Export into DataTable json format if there's any record in $tmp_data
@@ -295,7 +298,7 @@
             try {
                 // Select all users
                 $query = "
-                        select * 
+                        select id, email, username
                         from tb_user 
                         where state = 1 and access = 1
                         order by username
@@ -310,8 +313,8 @@
                 $rows = $statement->fetchAll();
                 // Foreach row in array
                 foreach ($rows as $row) {
-                    // Create a User object
-                    $user = new User($row);
+                    // Create a User Select object
+                    $user = new UserSelect($row);
                     //Create datatable row
                     $tmp_data[] = $user;
                 }
@@ -329,7 +332,7 @@
         /* Insert new user */
         public function insertUser() {
             try {
-                /* Check if for the empty or null username, password and access parameters */
+                /* Check if for the empty or null parameters */
                 if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["access"])) {
                     // Get the username from POST request to check
                     $check_data = array(
@@ -360,13 +363,13 @@
                     if ($row) {
                         $data[] = array('result' => 'This record already exists!');
                     } else {
-                        // Create a SQL query to insert an new user with a new username, password and access
+                        // Create a SQL query to insert an new user with all parameters
                         $query = "
                                 insert tb_user(email, username, password, access, state) values(:email, :username, :password, :access, 1);
                                 ";
                         // Prepare the query
                         $statement = $mysqlPDO->getConnection()->prepare($query);
-                        // Execute the query with passed parameter username, password and access
+                        // Execute the query with passed parameters
                         $statement->execute($form_data);
                         // Check if any affected row
                         if ($statement->rowCount()) {
@@ -397,7 +400,7 @@
         /* Update user */
         public function updateUser() {
             try {
-                /* Check if for the empty or null id, username, password and access parameters */
+                /* Check if for the empty or null parameters */
                 if (isset($_POST["id"]) && isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["access"])) {
                     // Get the id and username from POST request to check
                     $check_data = array(
@@ -412,7 +415,7 @@
                         ':password' => $_POST["password"],
                         ':access'   => $_POST["access"]
                     );
-                    // Check for existent user with the same username but different id in Database
+                    // Check for existent user in Database
                     $query = "
                             select id 
                             from tb_user 
@@ -422,7 +425,7 @@
                     $mysqlPDO = new MySQLPDO();
                     // Prepare the query
                     $statement = $mysqlPDO->getConnection()->prepare($query);
-                    // Execute the query with passed parameter id and username
+                    // Execute the query with passed parameters
                     $statement->execute($check_data);
                     // Get affect rows in associative array
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
@@ -430,7 +433,6 @@
                     if ($row) {
                         $data[] = array('result' => 'Record found!');
                     } else {
-                        // Create a SQL query to update an existent user with a new username, password and access with passed id
                         $query = "
                                 update tb_user
                                 set email = :email,
@@ -441,7 +443,7 @@
                                 ";
                         // Prepare the query
                         $statement = $mysqlPDO->getConnection()->prepare($query);
-                        // Execute the query with passed parameter id, username, password and access
+                        // Execute the query with passed parameters
                         $statement->execute($form_data);
                         // Check if any affected row
                         if ($statement->rowCount()) {
@@ -474,7 +476,7 @@
         /* Remove user */
         public function removeUser() {
             try {
-                /* Check if for the empty or null id parameters */
+                /* Check if for the empty or null parameters */
                 if (isset($_POST["id"])) {
                     // Get the id from POST request to remove
                     $form_data = array(
@@ -483,7 +485,7 @@
                     // Create a SQL query to remove an existent user with passed id
                     $query = "
                             update tb_user
-                            set state = 0
+                            set state = if(state = 0, 1, 0)
                             where id = :id;
                             ";
                     // Create object to connect to MySQL using PDO
