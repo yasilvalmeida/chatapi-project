@@ -193,7 +193,7 @@ sendMessage = (instance, token, body, phone, chatId, isContact, fileBase64, file
                 const { sent, message } = data;
                 console.log(data)
                 if (sent) {
-                    if (file) {
+                    if (fileBase64) {
                         if (isContact) tips.html(`New file was send to contact ${phone}!`);
                         else tips.html(`New file was send to group ${chatId}!`);
                     }
