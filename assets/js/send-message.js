@@ -190,15 +190,15 @@ sendMessage = (instance, token, body, phone, chatId, isContact, fileBase64, file
     (data, status) => {
         if (status == "success") {
             try {
-                const { sent, message } = data;
+                const { sent, message, queueNumber } = data;
                 console.log(data)
                 if (sent) {
                     if (fileBase64) {
-                        if (isContact) tips.html(`New file was send to contact ${phone}!`);
+                        if (isContact) tips.html(`New file was send to contact ${phone}! You have ${queueNumber} to be sent!`);
                         else tips.html(`New file was send to group ${chatId}!`);
                     }
                     else {
-                        if (isContact) tips.html(`New message was send to contact ${phone}!`);
+                        if (isContact) tips.html(`New message was send to contact ${phone}! You have ${queueNumber} to be sent!`);
                         else tips.html(`New message was send to group ${chatId}!`);
                     }
                     clear_form();
