@@ -125,8 +125,8 @@ function send() {
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function () {
-                    file = reader.result;
-                    sendMessage(instance, token, body, phone, chatId, isContact, file);
+                    const fileBase64 = reader.result;
+                    sendMessage(instance, token, body, phone, chatId, isContact, fileBase64, file.name);
                 };
                 reader.onerror = function (error) {
                     updateTips(tips, error);
@@ -142,7 +142,7 @@ function send() {
     }
 }
 
-sendMessage = (instance, token, body, phone, chatId, isContact, file) => {
+sendMessage = (instance, token, body, phone, chatId, isContact, fileBase64, filename) => {
     $("#okModal").modal("show");
     $("#title_state").html("Send new message");
     tips = $("#content_state");
@@ -154,7 +154,8 @@ sendMessage = (instance, token, body, phone, chatId, isContact, file) => {
         url = `https://eu53.chat-api.com/instance${instance}/sendFile?token=${token}`;
         if (isContact) {
             data = {
-                body: file,
+                body: fileBase64,
+                filename,
                 caption: body,
                 phone,
                 cached: true
@@ -162,7 +163,8 @@ sendMessage = (instance, token, body, phone, chatId, isContact, file) => {
         }
         else {
             data = {
-                body: file,
+                body: fileBase64,
+                filename,
                 caption: body,
                 chatId,
                 cached: true
