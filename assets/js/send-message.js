@@ -150,7 +150,7 @@ sendMessage = (instance, token, body, phone, chatId, isContact, fileBase64, file
     tips.html("<img src='assets/img/loader.gif' />");
     var url,
         data;
-    if (file) {
+    if (fileBase64) {
         url = `https://eu53.chat-api.com/instance${instance}/sendFile?token=${token}`;
         if (isContact) {
             data = {
