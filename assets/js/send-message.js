@@ -1,19 +1,10 @@
 $(() => {
-    
+    $('#contacts_snd').hide();
+    $('#groups_snd').hide();
+
     loadInstances();
 
     $("#message_snd").val("");
-    $("#contact_snd").show();
-
-    $('#radio_contact').click(function() {
-        $("#contact_snd").show();
-        $("#group_snd").hide();
-    });
-    
-    $('#radio_group').click(function() {
-        $("#contact_snd").hide();
-        $("#group_snd").show();
-    });
 });
 
 updateTips = (tips, t) => {
@@ -65,13 +56,20 @@ loadContacts = (instanceId) => {
     (data, status) => {
         if (status == "success") {
             try {
-                let html = "";
+                let html = '';
                 const contacts = JSON.parse(data);
                 contacts.map((contact, i) => {
-                    html += '<option value="' + contact.id + '">' + contact.name + ' - ' + contact.phone + '</option>';
+                    html += '<option value="' + contact.phone + '">' + contact.name + '</option>';
                 });
-                $("#contact_snd").html(html);
-                tips.html("")
+                $('#contacts_snd').hide();
+
+                $("#contacts_snd").html(html);
+
+                $('#contacts_snd').multiselect({
+                    nonSelectedText: 'Select contacts...',
+                    includeSelectAllOption: true,
+                    enableFiltering: true
+                });
             } catch (error) {
                 updateTips(tips, error);
             }
@@ -90,14 +88,21 @@ loadGroups = (instanceId) => {
     (data, status) => {
         if (status == "success") {
             try {
-                let html = "",
+                let html = '',
                     result = JSON.parse(data),
                     groups = result.data;
                 groups.map((group, i) => {
-                    html += '<option value="' + group.id + '">' + group.name + ' - ' + group.chat_id + '</option>';
+                    html += '<option value="' + group.chat_id + '">' + group.name + '</option>';
                 });
-                $("#group_snd").html(html);
-                tips.html("")
+                $("#groups_snd").html(html);
+
+                $('#groups_snd').multiselect({
+                    nonSelectedText: 'Select groups...',
+                    includeSelectAllOption: true,
+                    enableFiltering: true,
+                });
+
+                $('#groups_snd').hide();
             } catch (error) {
                 updateTips(tips, error);
             }
@@ -111,22 +116,27 @@ function send() {
     let body = $("#message_snd").val(),
         instance = $("#instance_snd option:selected").text().split(" - ")[0],
         token = $("#instance_snd option:selected").text().split(" - ")[1],
-        phone = $("#contact_snd option:selected").text().split(" - ")[1],
-        chatId = $("#group_snd option:selected").text().split(" - ")[1],
+        contacts = $("#contacts_snd").val(),
+        groups = $("#groups_snd").val(),
         file = $("#file_snd").prop("files")[0],
         tips = $("#send_state");
     if (body == "") {
         updateTips(tips, "Please type a message to send");
     }
+    else if (contacts.length == 0 && groups.length == 0) {
+        updateTips(tips, "Please select a contact or group");
+    }
     else {
-        const isContact = $("#radio_contact").is(":checked");
         if (file) {
             if (file.size <= 1048576) {
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function () {
                     const fileBase64 = reader.result;
-                    sendMessage(instance, token, body, phone, chatId, isContact, fileBase64, file.name);
+                    if (contacts.length > 0)
+                        sendMessageWithFileToContacts(instance, token, body, contacts, fileBase64, file.name);
+                    if (groups.length > 0) 
+                        sendMessageWithFileToGroups(instance, token, body, groups, fileBase64, file.name);
                 };
                 reader.onerror = function (error) {
                     updateTips(tips, error);
@@ -137,81 +147,160 @@ function send() {
             }
         }
         else {
-            sendMessage(instance, token, body, phone, chatId, isContact, file);
+            if (contacts.length > 0)
+                sendMessageWithoutFileToContacts(instance, token, body, contacts);
+            if (groups.length > 0)
+                sendMessageWithoutFileToGroups(instance, token, body, groups);
         }
     }
 }
 
-sendMessage = (instance, token, body, phone, chatId, isContact, fileBase64, filename) => {
-    $("#okModal").modal("show");
-    $("#title_state").html("Send new message");
-    tips = $("#content_state");
+sendMessageWithFileToContacts = (instance, token, body, contacts, fileBase64, filename) => {
+    var tips = $("#contacts_file_state");
     tips.addClass("alert-light");
     tips.html("<img src='assets/img/loader.gif' />");
-    var url,
-        data;
-    if (fileBase64) {
-        url = `https://eu53.chat-api.com/instance${instance}/sendFile?token=${token}`;
-        if (isContact) {
-            data = {
-                body: fileBase64,
-                filename,
-                caption: body,
-                phone,
-                cached: true
-            }
+    var data, count = 0;
+    contacts.map((phone, i) => {
+        data = {
+            body: fileBase64,
+            filename,
+            caption: body,
+            phone,
+            cached: true
         }
-        else {
-            data = {
-                body: fileBase64,
-                filename,
-                caption: body,
-                chatId,
-                cached: true
-            }
-        }
-    }
-    else {
-        url = `https://eu53.chat-api.com/instance${instance}/sendMessage?token=${token}`;
-        if (isContact) {
-            data = {
-                body,
-                phone
-            }
-        }
-        else {
-            data = {
-                body,
-                chatId
-            }
-        }
-    }
-    $.post(url, data, 
-    (data, status) => {
-        if (status == "success") {
-            try {
-                const { sent, message, queueNumber } = data;
-                console.log(data)
-                if (sent) {
-                    if (fileBase64) {
-                        if (isContact) tips.html(`New file was send to contact ${phone}! You have ${queueNumber} to be sent!`);
-                        else tips.html(`New file was send to group ${chatId}!`);
+        $.post(`https://eu53.chat-api.com/instance${instance}/sendFile?token=${token}`, data, 
+        (data, status) => {
+            if (status == "success") {
+                try {
+                    const { sent, message, queueNumber } = data;
+                    console.log(data)
+                    if (sent) {
+                        count++;
+                        tips.html(`New file was send to ${count} of ${contacts.length} contact! You have ${queueNumber} to be sent!`);
+                        if (count == contacts.length - 1) {
+                            clear_form();
+                        }
                     }
                     else {
-                        if (isContact) tips.html(`New message was send to contact ${phone}! You have ${queueNumber} to be sent!`);
-                        else tips.html(`New message was send to group ${chatId}!`);
+                        updateTips(tips, message);
                     }
-                    clear_form();
+                } catch (error) {
+                    updateTips(tips, error);
                 }
-                else {
-                    updateTips(tips, message);
-                }
-            } catch (error) {
-                updateTips(tips, error);
+            } else {
+                updateTips(tips, data);
             }
-        } else {
-            updateTips(tips, data);
+        });
+    });
+}
+
+sendMessageWithFileToGroups = (instance, token, body, groups, fileBase64, filename) => {
+    var tips = $("#groups_file_state");
+    tips.addClass("alert-light");
+    tips.html("<img src='assets/img/loader.gif' />");
+    var data, count = 0;
+    groups.map((chatId, i) => {
+        data = {
+            body: fileBase64,
+            filename,
+            caption: body,
+            chatId,
+            cached: true
         }
+        $.post(`https://eu53.chat-api.com/instance${instance}/sendFile?token=${token}`, data, 
+        (data, status) => {
+            if (status == "success") {
+                try {
+                    const { sent, message, queueNumber } = data;
+                    console.log(data)
+                    if (sent) {
+                        count++;
+                        tips.html(`New file was send to ${count} of ${groups.length} group! You have ${queueNumber} to be sent!`);
+                        if (count == groups.length - 1) {
+                            clear_form();
+                        }
+                    }
+                    else {
+                        updateTips(tips, message);
+                    }
+                } catch (error) {
+                    updateTips(tips, error);
+                }
+            } else {
+                updateTips(tips, data);
+            }
+        });
+    });
+}
+
+sendMessageWithoutFileToGroups = (instance, token, body, groups) => {
+    var tips = $("#groups_state");
+    tips.addClass("alert-light");
+    tips.html("<img src='assets/img/loader.gif' />");
+    var data, count = 0;
+    groups.map((chatId, i) => {
+        data = {
+            body,
+            chatId
+        }
+        $.post(`https://eu53.chat-api.com/instance${instance}/sendMessage?token=${token}`, data, 
+        (data, status) => {
+            if (status == "success") {
+                try {
+                    const { sent, message, queueNumber } = data;
+                    console.log(data)
+                    if (sent) {
+                        count++;
+                        tips.html(`New message was send to ${count} of ${groups.length} group! You have ${queueNumber} to be sent!`);
+                        if (count == groups.length - 1) {
+                            clear_form();
+                        }
+                    }
+                    else {
+                        updateTips(tips, message);
+                    }
+                } catch (error) {
+                    updateTips(tips, error);
+                }
+            } else {
+                updateTips(tips, data);
+            }
+        });
+    });
+}
+
+sendMessageWithoutFileToContacts = (instance, token, body, contacts) => {
+    var tips = $("#contacts_state");
+    tips.addClass("alert-light");
+    tips.html("<img src='assets/img/loader.gif' />");
+    var data, count = 0;
+    contacts.map((phone, i) => {
+        data = {
+            body,
+            phone
+        }
+        $.post(`https://eu53.chat-api.com/instance${instance}/sendMessage?token=${token}`, data, 
+        (data, status) => {
+            if (status == "success") {
+                try {
+                    const { sent, message, queueNumber } = data;
+                    if (sent) {
+                        count++;
+                        tips.html(`New message was send to ${count} of ${contacts.length} contact! You have ${queueNumber} to be sent!`);
+                        if (count == contacts.length - 1) {
+                            clear_form();
+                        }
+                    }
+                    else {
+                        updateTips(tips, message);
+                    }
+                } catch (error) {
+                    updateTips(tips, error);
+                }
+            } else {
+                updateTips(tips, data);
+            }
+        });
     });
 }
 
@@ -222,6 +311,8 @@ clear_form = () => {
     $("#movie_snd").val("");
     $("#audio_snd").val("");
     $("#pdf_snd").val("");
+    $("#contacts_snd").val("");
+    $("#groups_snd").val("");
     $("#send_state").removeClass("alert-success");
     $("#send_state").addClass("alert-light");
     $("#send_state").html("");

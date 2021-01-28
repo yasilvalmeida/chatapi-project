@@ -13,6 +13,7 @@
         <?php
             require("cmp/head.php");
         ?>
+        <link rel="stylesheet" href="assets/css/multi-select.css" />
     </head>
 
     <body id="page-top">
@@ -60,24 +61,19 @@
                                                 <input  id="file_snd" class="form-control" type="file" accept="image/*,application/pdf,audio/ogg,video/*" /><br>
 
                                                 <hr>
-                                                <center>
-                                                    <input type="radio" name="type" id="radio_contact" checked>&nbsp;Contact
-                                                    <input type="radio" name="type" id="radio_group">&nbsp;Group&nbsp;&nbsp;
-                                                </center>
                                                 
-                                                <div class="form-group">
-                                                    <select id='contact_snd' name="contact_snd[]" class="selectpicker" multiple data-live-search="true" style="display:none;">
-                                                    </select>
-                                                </div>
+                                                <select id="contacts_snd" multiple style="display: none;"></select>
 
-                                                <div class="form-group">
-                                                    <select id='group_snd' name="group_snd[]" class="selectpicker" multiple data-live-search="true" style="display:none;">
-                                                    </select>
-                                                    </select>
-                                                </div>
+                                                <select id="groups_snd" multiple style="display: none;"></select>
 
+                                                <hr />
                                                 <div id="send_state" class="d-flex justify-content-center" role="alert">
                                                 </div>
+                                                <hr />
+                                                <div id="contacts_state" class="d-flex justify-content-center" role="alert"></div>
+                                                <div id="groups_state" class="d-flex justify-content-center" role="alert"></div>
+                                                <div id="contacts_file_state" class="d-flex justify-content-center" role="alert"></div>
+                                                <div id="groups_file_state" class="d-flex justify-content-center" role="alert"></div>
                                             </form>
                                         </div>
                                         <div class="card-footer">
@@ -99,9 +95,10 @@
             </a>
         </div>
         <?php
-            require("cmp/modal/confirmation.php");
             require("cmp/script.php");
         ?>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script src="assets/js/multi-select.js"></script>
         <script src="assets/js/send-message.js"></script>
     </body>
 
