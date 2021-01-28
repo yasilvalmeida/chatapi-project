@@ -154,15 +154,4 @@ function exit() {
             }
         }
     );
-    $.post("ajax/sair.php", {},
-        function(data) {
-            var result = parseInt(data.text);
-            if (result > 0) {
-                setTimeout(function() {
-                    document.location.reload(true);
-                }, 100);
-            } else {
-                updateTips(tips, data);
-            }
-        }, "json");
 }

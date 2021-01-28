@@ -33,10 +33,14 @@
                                                 <i class="fa fa-save fa-sm fa-fw mr-2 text-gray-400"></i>
                                                 New 
                                             </a>
-                                            <!-- <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addModal">
-                                                <i class="fa fa-save fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            <a class="btn btn-success" href="#" data-toggle="modal" data-target="#importModal">
+                                                <i class="fas fa-file-upload fa-sm fa-fw mr-2 text-gray-400"></i>
                                                 Import
-                                            </a> -->
+                                            </a>
+                                            <a class="btn btn-success" href="#" data-toggle="modal" data-target="#migrateModal">
+                                                <i class="fas fa-exchange-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                Migrate
+                                            </a>
                                             <hr />
                                             <table id="dataTable" class="table table-striped table-bordered table-hover display">
                                                 <thead>

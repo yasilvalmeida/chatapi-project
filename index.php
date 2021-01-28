@@ -25,7 +25,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h4 class="text-dark mb-4">Welcome system SMS</h4>
+                                            <h4 class="text-dark mb-4">Welcome SMS Sending System</h4>
                                         </div>
                                         <form class="user">
                                             <div class="input-group mb-4">

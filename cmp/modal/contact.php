@@ -1,4 +1,81 @@
 <!-- Modals -->
+<!-- Migrate Modal-->
+<div class="modal fade" id="migrateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Migrate contacts</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="user">
+                    <div class="form-group">
+                        <label for="from_mgt">From instance</label>
+                        <select id='from_mgt' class='form-control'>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="to_mgt">To instance</label>
+                        <select id='to_mgt' class='form-control'>
+                        </select>
+                    </div>
+                    <hr/>
+                    <div id="migrate_state" class="d-flex justify-content-center" role="alert">
+                    </div>
+                </form>
+            </div>
+            <div id="migrate_button" class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success" href="javascript:migrate()">Migrate</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Import Modal-->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Import contacts from CSV</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="user">
+                    <div class="form-group">
+                        <label for="file_irt">CSV file</label>
+                        <input id="file_irt" type="file" accept=".csv" class="form-control form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="instance_irt">Instance</label>
+                        <select id='instance_irt' class='form-control'>
+                        </select>
+                        <input id="nContacts" type="hidden" value="0" />
+                        <input id="nTotal" type="hidden" value="0" />
+                    </div>
+                    <hr/>
+                    <div id="import_state" class="d-flex justify-content-center" role="alert">
+                    </div>
+                    <hr />
+                    <div class="form-group" id="process" style="display:none;">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                <span id="process_data">0</span><!--  - <span id="total_data">0</span> -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="import_button" class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success" href="javascript:importCSV()">Import</a>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Add Modal-->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -23,7 +100,7 @@
                         </select>
                     </div>
                     <hr/>
-                    <div id="insert_state" class="d-flex justify-content-center"  role="alert">
+                    <div id="insert_state" class="d-flex justify-content-center" role="alert">
                     </div>
                 </form>
             </div>

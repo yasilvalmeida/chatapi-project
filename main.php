@@ -32,7 +32,7 @@
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col mr-2">
                                                     <div class="text-dark font-weight-bold h5 mb-0">
-                                                        <p>Welcome to SMS System</p>
+                                                        <p>Welcome SMS Sending System</p>
                                                     </div>
                                                 </div>
                                             </div>

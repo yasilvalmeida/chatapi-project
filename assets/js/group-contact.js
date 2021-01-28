@@ -34,10 +34,17 @@ $(() => {
     };
 });
 loadGroupInformation = () => {
-    $.post("api/api.php?action=fetchSingleGroup", {
-        group_id: $("#group_id").val(),
-        user_id: $("#logged_id").val()
-    },
+    let data = {
+        group_id: $("#group_id").val()
+    };
+    var logged_access = parseInt($("#logged_access").val());
+    if (logged_access != 0) {
+        data = {
+            group_id: $("#group_id").val(),
+            user_id: $("#logged_id").val()
+        }
+    }
+    $.post("api/api.php?action=fetchSingleGroup", data,
     (data, status) => {
         if (status == "success") {
             try {
@@ -47,15 +54,71 @@ loadGroupInformation = () => {
                     window.location.href = "group.php";
                 }
                 $("#title").html(group.name + " - Participants");
-                loadDataTable()
+                loadDataTable();
             } catch (error) {
-                updateTips(tips, error);
+                console.error(error);
             }
         } else {
-            updateTips(tips, data);
+            console.log(data);
         }
     });
 }
+/* syncParticipantWithWhatsApp = () => {
+    let tips = $("#sync_state");
+    tips.addClass("alert-light");
+    tips.html("<img src='assets/img/loader.gif' />");
+    $("#sync_button").html('<button class="btn btn-danger" type="button" data-dismiss="modal">Close</button>');
+    let tSuccess = 0,
+        tFail = 0,
+        tContacts = 0;
+    $.get(`https://api.chat-api.com/instance${group.instance}/dialog?token=${group.token}`, {
+        chatId: group.chat_id
+    }, 
+    (data, status) => {
+        if (status == "success") {
+            let participants = data.metadata.participants;
+            participants.map((contact, i) => {
+
+            });
+            $("#sync_state").html("Sync successful!");
+            group_contact_data_table.ajax.reload();
+            if (data.error) tips.html(data.error)
+            else tips.html(data)
+            // Insert contacts that not exists yet in MySQL database
+            let totalGroups = data.dialogs.length;
+            tGroups += totalGroups;
+            data.dialogs.map((dialog, j) => {
+                if (dialog.metadata.isGroup) {
+                    $.post("api/api.php?action=insertGroup", {
+                        name: dialog.name,
+                        link: dialog.metadata.groupInviteLink,
+                        chat_id: dialog.id,
+                        instance_id: instanceId
+                    },
+                    (data, status) => {
+                        if (status == "success") {
+                            try {
+                                var r = JSON.parse(data);
+                                if (r.result == "1") tSuccess++;
+                                else tFail++;
+                                tips.html("<table><tr><td>Instance:</td><td>" + totalInstances + "</td></tr><tr><td>Dialogs:</td><td>" + tGroups + "</td></tr><tr><td>Updated:</td><td></td></tr><tr><td><i class='fas fa-check' style='color: green;'></i></td><td>" + tSuccess + "</td></tr><tr><td><i class='fas fa-times' style='color: red;'></i></td><td>" + tFail + "</td></tr></table>");
+                                group_data_table.ajax.reload();
+                            } catch (error) {
+                                console.error(error);
+                            }
+                        } else {
+                            console.log(data);
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            tips.html("Failed to sync!");
+            $("#sync_button").html('<button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button><a class="btn btn-success" href="javascript:syncParticipantWithWhatsApp()">Sync</a>');
+        }
+    });
+} */
 loadDataTable = () => {
     group_contact_data_table = $("#dataTable").DataTable({
         processing: true,

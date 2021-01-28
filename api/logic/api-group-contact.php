@@ -4,7 +4,7 @@
     require_once("classes/group-contact.php");
     // API for Contact CRUD Class
     class GroupContactAPI {
-        /* Contact Actions Begin */
+        /* Group Contact Actions Begin */
         /* Retrieve all contact by group */
         public function fetchAllGroupContact() {
             try {
@@ -18,7 +18,7 @@
                             FROM tb_group tg
                             join tb_contact tc on tg.instance_id = tc.instance_id
                             left join tb_group_contact tgc on tg.id = tgc.group_id AND tc.id = tgc.contact_id
-                            where tg.id=:group_id
+                            where tg.id = :group_id
                             order by tc.name, tc.phone
                             ";
                     // Create object to connect to MySQL using PDO
@@ -190,6 +190,6 @@
                 die("Error message" . $e->getMessage());
             }
         }
-        /* Contact Actions End */
+        /* Group Contact Actions End */
     }
 ?>

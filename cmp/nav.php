@@ -5,7 +5,7 @@
             <i class="fas fa-paper-plane"></i>
             </div>
             <div class="sidebar-brand-text mx-3">
-                <span>SMS System</span>
+                <span>3S</span>
             </div>
         </a>
         <hr class="sidebar-divider my-0">

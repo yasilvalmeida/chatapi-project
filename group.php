@@ -33,10 +33,14 @@
                                                 <i class="fa fa-save fa-sm fa-fw mr-2 text-gray-400"></i>
                                                 New 
                                             </a>
-                                            <!-- <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addModal">
-                                                <i class="fa fa-save fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                Import
-                                            </a> -->
+                                            <a id="add250Button" class="btn btn-success" href="#" data-toggle="modal" data-target="#add250Modal" disabled>
+                                                <i class="fas fa-user-friends fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                Add 250
+                                            </a>
+                                            <a class="btn btn-success" href="#" data-toggle="modal" data-target="#syncModal">
+                                                <i class="fas fa-sync-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                Sync
+                                            </a>
                                             <hr />
                                             <table id="dataTable" class="table table-striped table-bordered table-hover display">
                                                 <thead>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <?php
-    require_once("cmp/session.php");
     if (!isset($_GET["id"])) {
         header('Location: group.php');
     }
     else {
+        require("cmp/session.php");
         $group_id = $_GET["id"];
         echo "<input id='group_id' value='".$group_id."' type='hidden' />";
     }
@@ -36,6 +36,11 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body">
+                                            <!-- <a class="btn btn-success" href="#" data-toggle="modal" data-target="#syncModal">
+                                                <i class="fas fa-sync-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                Sync
+                                            </a>
+                                            <hr /> -->
                                             <table id="dataTable" class="table table-striped table-bordered table-hover display">
                                                 <thead>
                                                     <tr>

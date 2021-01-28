@@ -66,12 +66,13 @@
                                                 </center>
                                                 
                                                 <div class="form-group">
-                                                    <select id='contact_snd' class='form-control' style="display:none;">
+                                                    <select id='contact_snd' name="contact_snd[]" class="selectpicker" multiple data-live-search="true" style="display:none;">
                                                     </select>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <select id='group_snd' class='form-control' style="display:none;">
+                                                    <select id='group_snd' name="group_snd[]" class="selectpicker" multiple data-live-search="true" style="display:none;">
+                                                    </select>
                                                     </select>
                                                 </div>
 
