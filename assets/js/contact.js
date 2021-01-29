@@ -301,6 +301,7 @@ function importCSVAsync() {
             cache: false,
             success: function(data, status) {
                 if (status == "success") {
+                    console.log(data)
                     var r = JSON.parse(data);
                     $("#total_data").text(r.nLines);
                     $("#nContacts").val(r.nContacts);
@@ -339,14 +340,16 @@ get_import_data = () => {
         url: "api/logic/callback/contact-import-status.php",
         success:function(data, status) {
             /* var r = JSON.parse(data),
-                initialContacts = $("#nContacts").val(); */
-            var total_data = parseInt($('#nTotal').val());
+                 */
+            var initialContacts = $("#nContacts").val();
+                total_data = parseInt($('#nTotal').val());
+            data -= initialContacts;
             //console.log("count", data);
             //console.log("total", total_data);
             var width = Math.round((data / total_data) * 100);
             $('#process_data').text(data + " of " + total_data);
             $('.progress-bar').css('width', width + '%');
-            if(width >= 100) {
+            if(width + 10 >= 100) {
                 clearInterval(clear_timer);
                 $('#process').css('display', 'none');
                 $("#import_button").html('<button class="btn btn-danger" type="button" data-dismiss="modal">Close</button>');

@@ -251,10 +251,6 @@
             try {
                 /* Check if for the empty or null parameters */
                 if (isset($_POST["name"]) && isset($_POST["link"]) && isset($_POST["chat_id"]) && isset($_POST["instance_id"])) {
-                    // Get the name from POST request to check
-                    $check_data = array(
-                        ':name' => $_POST["name"]
-                    );
                     // Get the name, link, chat id and instance id from POST request to insert
                     $form_data = array(
                         ':name'        => $_POST["name"],
@@ -262,39 +258,21 @@
                         ':chat_id'     => $_POST["chat_id"],
                         ':instance_id' => $_POST["instance_id"],
                     );
-                    // Check for existent group in Database
+                    // Create a SQL query to insert an new group with all parameters
                     $query = "
-                            select id 
-                            from tb_group 
-                            where name = :name
+                            call sp_insert_group(:name, :link, :chat_id, :instance_id);
                             ";
                     // Create object to connect to MySQL using PDO
                     $mysqlPDO = new MySQLPDO();
                     // Prepare the query
                     $statement = $mysqlPDO->getConnection()->prepare($query);
-                    // Execute the query with passed parameters
-                    $statement->execute($check_data);
+                    // Execute the query with passed all parameters
+                    $statement->execute($form_data);
                     // Get affect rows in associative array
-                    $row = $statement->fetch(PDO::FETCH_ASSOC);
+                    $row = $statement->fetch();
                     // Check if any affected row
-                    if ($row) {
-                        $data[] = array('result' => 'This record already exists!');
-                    } else {
-                        // Create a SQL query to insert an new group with all parameters
-                        $query = "
-                                insert tb_group(name, link, chat_id, instance_id) 
-                                values (:name, :link, :chat_id, :instance_id);
-                                ";
-                        // Prepare the query
-                        $statement = $mysqlPDO->getConnection()->prepare($query);
-                        // Execute the query with passed all parameters
-                        $statement->execute($form_data);
-                        // Check if any affected row
-                        if ($statement->rowCount()) {
-                            $data[] = array('result' => '1');
-                        } else {
-                            $data[] = array('result' => 'No operations performed on the database!');
-                        }
+                    if ($statement->rowCount()) {
+                        $data[] = array('result' => $row["result"]);
                     }
                 } else {
                     // Check for missing parameters
@@ -586,6 +564,7 @@
         /* Remove group */
         public function removeGroup() {
             try {
+                $data = [];
                 /* Check if for the empty or null parameters */
                 if (isset($_POST["id"])) {
                     // Get the id from POST request to remove
@@ -606,20 +585,7 @@
                     $statement->execute($form_data);
                     // Check if any affected row
                     if ($statement->rowCount()) {
-                        // Create a SQL query to remove an existent group with passed id
-                        $query = 
-                                "
-                                delete from tb_group_contact
-                                where group_id = :id;
-                                ";
-                        // Prepare the query
-                        $statement = $mysqlPDO->getConnection()->prepare($query);
-                        // Execute the query with passed parameter id
-                        $statement->execute($form_data);
-                        // Check if any affected row
-                        if ($statement->rowCount()) {
-                            $data[] = array('result' => '1');
-                        }
+                        $data[] = array('result' => '1');
                     } else {
                         $data[] = array('result' => 'No operations performed on the database!');
                     }

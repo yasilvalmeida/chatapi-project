@@ -182,27 +182,27 @@ syncWithWhatsApp = () => {
         if (status == "success") {
             try {
                 var r = JSON.parse(data);
-                let totalInstances = r.length,
-                    nSuccess = [],
-                    nFail = [],
-                    tSuccess = 0,
-                    tFail = 0,
-                    tGroups = 0;
+                let tInstances = r.length,
+                    tSuccess,
+                    tFail,
+                    tDialogs = 0,
+                    tGroups;
                 r.map((ins, i) => {
                     let instanceId = ins.id,
                         instance = ins.instance,
                         token = ins.token;
-                    nSuccess[i] = 0;
-                    nFail[i] = 0;
+                    tSuccess = 0;
+                    tFail = 0;
+                    tGroups = 0;
                     $.get(`https://api.chat-api.com/instance${instance}/dialogs?token=${token}`, {
                         limit: 0,
                         page: 0
                     }, 
                     (data, status) => {
-                        let totalGroups = data.dialogs.length;
-                        tGroups += totalGroups;
+                        tDialogs = data.dialogs.length;
                         data.dialogs.map((dialog, j) => {
                             if (dialog.metadata.isGroup) {
+                                tGroups++;
                                 $.post("api/api.php?action=insertGroup", {
                                     name: dialog.name,
                                     link: dialog.metadata.groupInviteLink,
@@ -215,7 +215,7 @@ syncWithWhatsApp = () => {
                                             var r = JSON.parse(data);
                                             if (r.result == "1") tSuccess++;
                                             else tFail++;
-                                            tips.html("<table><tr><td>Instance:</td><td>" + totalInstances + "</td></tr><tr><td>Dialogs:</td><td>" + tGroups + "</td></tr><tr><td>Updated:</td><td></td></tr><tr><td><i class='fas fa-check' style='color: green;'></i></td><td>" + tSuccess + "</td></tr><tr><td><i class='fas fa-times' style='color: red;'></i></td><td>" + tFail + "</td></tr></table>");
+                                            tips.html("<table><tr><td>Instance:</td><td>" + tInstances + "</td></tr><tr><td>Dialogs:</td><td>" + j + " of " + tDialogs + "</td></tr><tr><td>Groups:</td><td>" + tGroups + "</td></tr><tr><td>Updated:</td><td></td></tr><tr><td><i class='fas fa-check' style='color: green;'></i></td><td>" + tSuccess + "</td></tr><tr><td><i class='fas fa-times' style='color: red;'></i></td><td>" + tFail + "</td></tr></table>");
                                             group_data_table.ajax.reload();
                                         } catch (error) {
                                             console.error(error);
@@ -278,8 +278,7 @@ function insertAsync() {
                     clear_form();
                     group_data_table.ajax.reload();
                 } else {
-
-                    updateTips(tips, r.result);
+                    updateTips(tips, "This name group already exists for this instance");
                 }
             } catch (error) {
                 updateTips(tips, error);
