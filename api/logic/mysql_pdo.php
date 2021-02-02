@@ -13,6 +13,10 @@
         */
         public function __construct()
         {
+            /* $this->hostname = "162.215.241.244";
+            $this->database = "thenadrl_db";
+            $this->username = "thenadrl_sa";
+            $this->password = "Sudhir@RTI21$"; */
             $this->hostname = "ybytesi.com";
             $this->database = "chatapi_db";
             $this->username = "chatapi_sa";

@@ -165,18 +165,17 @@ sendMessageWithFileToContacts = (instance, token, body, contacts, fileBase64, fi
             body: fileBase64,
             filename,
             caption: body,
-            phone,
-            cached: true
+            phone
         }
         $.post(`https://eu53.chat-api.com/instance${instance}/sendFile?token=${token}`, data, 
         (data, status) => {
             if (status == "success") {
                 try {
-                    const { sent, message, queueNumber } = data;
+                    const { sent, message } = data;
                     console.log(data)
                     if (sent) {
                         count++;
-                        tips.html(`New file was send to ${count} of ${contacts.length} contact! You have ${queueNumber} to be sent!`);
+                        tips.html(`New file was send to ${count} of ${contacts.length} contact!`);
                         if (count == contacts.length - 1) {
                             clear_form();
                         }
@@ -204,18 +203,17 @@ sendMessageWithFileToGroups = (instance, token, body, groups, fileBase64, filena
             body: fileBase64,
             filename,
             caption: body,
-            chatId,
-            cached: true
+            chatId
         }
         $.post(`https://eu53.chat-api.com/instance${instance}/sendFile?token=${token}`, data, 
         (data, status) => {
             if (status == "success") {
                 try {
-                    const { sent, message, queueNumber } = data;
+                    const { sent, message } = data;
                     console.log(data)
                     if (sent) {
                         count++;
-                        tips.html(`New file was send to ${count} of ${groups.length} group! You have ${queueNumber} to be sent!`);
+                        tips.html(`New file was send to ${count} of ${groups.length} group!`);
                         if (count == groups.length - 1) {
                             clear_form();
                         }
@@ -247,11 +245,11 @@ sendMessageWithoutFileToGroups = (instance, token, body, groups) => {
         (data, status) => {
             if (status == "success") {
                 try {
-                    const { sent, message, queueNumber } = data;
+                    const { sent, message } = data;
                     console.log(data)
                     if (sent) {
                         count++;
-                        tips.html(`New message was send to ${count} of ${groups.length} group! You have ${queueNumber} to be sent!`);
+                        tips.html(`New message was send to ${count} of ${groups.length} group!`);
                         if (count == groups.length - 1) {
                             clear_form();
                         }
@@ -283,10 +281,10 @@ sendMessageWithoutFileToContacts = (instance, token, body, contacts) => {
         (data, status) => {
             if (status == "success") {
                 try {
-                    const { sent, message, queueNumber } = data;
+                    const { sent, message } = data;
                     if (sent) {
                         count++;
-                        tips.html(`New message was send to ${count} of ${contacts.length} contact! You have ${queueNumber} to be sent!`);
+                        tips.html(`New message was send to ${count} of ${contacts.length} contact!`);
                         if (count == contacts.length - 1) {
                             clear_form();
                         }

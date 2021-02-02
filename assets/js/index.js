@@ -269,9 +269,10 @@ loginAsync = () => {
             password: password,
         },
         (data, status) => {
+            console.log(data)
             if (status == "success") {
                 try {
-                    //console.log(data)
+                    
                     var r = JSON.parse(data),
                         result = parseInt(r.result);
                     if (result != NaN && result == 1) {
