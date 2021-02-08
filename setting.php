@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <?php
     require_once("cmp/session.php");
-    $access = $_SESSION[$_SESSION['views'].'access'];
-    if ($access == 0) {
-        header('Location: main.php');
-    }
 ?>
 <html>
 
@@ -36,6 +32,8 @@
                                         <div class="card-body">
                                             <form class="user">
                                                 <div class="form-group">
+                                                    <label for="URL">Please paster this webhook URL if empty</label>
+                                                    <p>http://portfolio.ybytesi.com/chatapi/api/logic/callback/instance-webhook.php</p>
                                                     <label>Instance</label>
                                                     <select id='instance_snd' class='form-control'>
                                                     </select>

@@ -6,6 +6,7 @@
     require_once('logic/api-group.php');
     require_once('logic/api-group-contact.php');
     require_once('logic/api-dashboard.php');
+    require_once('logic/api-report.php');
 
     // Create session
     session_start();
@@ -25,6 +26,8 @@
         $groupContactAPI = new  GroupContactAPI();
         // Create a API for Dashboard CRUD
         $dashboardAPI = new DashboardAPI();
+        // Create a API for Report CRUD
+        $reportAPI = new ReportAPI();
 
         /**********************/
         
@@ -220,6 +223,12 @@
             $data = $dashboardAPI->dashboard();
         }
         /* Dashboard Action End */
+
+        /* Report Action Begin */
+        else if ($_GET["action"] == 'fetchAllMessage') {
+            $data = $reportAPI->fetchAllMessage();
+        }
+        /* Report Action End */
 
         // No action to perform
         else
