@@ -15,10 +15,6 @@
             if ($ack) {
                 $msgId  = $ack["id"];
                 $status = $ack["status"];
-                // Set the data parameters
-                $data = array(
-                    ':msgId'
-                );
                 // Create the query
                 $query = '
                         select id
