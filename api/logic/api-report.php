@@ -18,6 +18,7 @@
                             select *
                             from tb_message tm
                             where tm.instanceId = :instanceId
+                            order by sentAt desc
                             ";
                     // Create object to connect to MySQL using PDO
                     $mysqlPDO = new MySQLPDO();
