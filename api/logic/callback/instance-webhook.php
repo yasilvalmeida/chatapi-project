@@ -56,14 +56,59 @@
                             // Flush (send) the output buffer and turn off output buffering
                             ob_end_flush();
                         }
-                        echo "Update new status ".$status." for ".$msgId." into MySQL";
+                        $error = "Update new status ".$status." for ".$msgId." into MySQL";
+                        echo $error;
+                        // Error Query
+                        $query = 
+                                "
+                                    insert into tb_error(error)
+                                    values('".$error."');
+                                ";
+                        // Create object to connect to MySQL using PDO
+                        $mysqlPDO = new MySQLPDO();
+                        // Prepare the query
+                        $statement = $mysqlPDO->getConnection()->prepare($query);
+                        // Execute the query with parameters
+                        $statement->execute();
+                        // Get affect rows in associative array
+                        $rows = $statement->fetch();
                     }
                     else {
-                        echo "Status ".$status." not updated!";
+                        $error = "Status ".$status." not updated!";
+                        echo $error;
+                        // Error Query
+                        $query = 
+                        "
+                            insert into tb_error(error)
+                            values('".$error."');
+                        ";
+                        // Create object to connect to MySQL using PDO
+                        $mysqlPDO = new MySQLPDO();
+                        // Prepare the query
+                        $statement = $mysqlPDO->getConnection()->prepare($query);
+                        // Execute the query with parameters
+                        $statement->execute();
+                        // Get affect rows in associative array
+                        $rows = $statement->fetch();
                     }
                 }
                 else {
-                    echo "Message not found!";
+                    $error = "Message not found!";
+                    echo $error;
+                    // Error Query
+                    $query = 
+                            "
+                                insert into tb_error(error)
+                                values('".$error."');
+                            ";
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query with parameters
+                    $statement->execute();
+                    // Get affect rows in associative array
+                    $rows = $statement->fetch();
                 }
             }
             // Add new message
@@ -128,14 +173,60 @@
                             echo "Insert new message for ".$msgId." into MySQL";
                         }
                         else {
-                            echo "Message not inserted!";
+                            $error = "Message not inserted!";
+                            echo $error;
+                            // Error Query
+                            $query = 
+                                    "
+                                        insert into tb_error(error)
+                                        values('".$error."');
+                                    ";
+                            // Create object to connect to MySQL using PDO
+                            $mysqlPDO = new MySQLPDO();
+                            // Prepare the query
+                            $statement = $mysqlPDO->getConnection()->prepare($query);
+                            // Execute the query with parameters
+                            $statement->execute();
+                            // Get affect rows in associative array
+                            $rows = $statement->fetch();
                         }
                     }
                 }
                 else {
-                    echo "Instance not found";
+                    $error = "Instance not found";
+                    echo $error;
+                    // Error Query
+                    $query = 
+                            "
+                                insert into tb_error(error)
+                                values('".$error."');
+                            ";
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
+                    // Prepare the query
+                    $statement = $mysqlPDO->getConnection()->prepare($query);
+                    // Execute the query with parameters
+                    $statement->execute();
+                    // Get affect rows in associative array
+                    $rows = $statement->fetch();
                 }
             }
+        }
+        else {
+            // Error Query
+            $query = 
+                    "
+                        insert into tb_error(error)
+                        values('".print_r($data)."');
+                    ";
+            // Create object to connect to MySQL using PDO
+            $mysqlPDO = new MySQLPDO();
+            // Prepare the query
+            $statement = $mysqlPDO->getConnection()->prepare($query);
+            // Execute the query with parameters
+            $statement->execute();
+            // Get affect rows in associative array
+            $rows = $statement->fetch();
         }
     } catch (PDOException $e) {
         die("Error message" . $e->getMessage());
