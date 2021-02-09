@@ -29,11 +29,11 @@ loadInstances = () => {
                     html += '<option value="' + instance.id + '">' + instance.instance + ' - ' + instance.token + '</option>';
                 });
                 $("#instance_snd").html(html);
-                const instanceId = $("#instance_snd").val();
+                const instanceId = $("#instance_snd option:selected").val();
                 loadContacts(instanceId);
                 loadGroups(instanceId);
                 $("#instance_snd").on("change", (e) => {
-                    const instanceId = this.value;
+                    const instanceId = $("#instance_snd option:selected").val();
                     loadContacts(instanceId);
                     loadGroups(instanceId);
                 });
@@ -48,6 +48,7 @@ loadInstances = () => {
 }
 
 loadContacts = (instanceId) => {
+    $("#contacts").html('<select id="contacts_snd" multiple style="display: none;"></select>');
     var tips = $("#send_state");
     tips.html("<img src='assets/img/loader.gif' />");
     $.post("api/api.php?action=fetchAllContactByInstanceSelect", {
@@ -61,8 +62,6 @@ loadContacts = (instanceId) => {
                 contacts.map((contact, i) => {
                     html += '<option value="' + contact.phone + '">' + contact.name + '</option>';
                 });
-                $('#contacts_snd').hide();
-
                 $("#contacts_snd").html(html);
 
                 $('#contacts_snd').multiselect({
@@ -70,6 +69,10 @@ loadContacts = (instanceId) => {
                     includeSelectAllOption: true,
                     enableFiltering: true
                 });
+
+                $('#contacts_snd').hide();
+
+                tips.html("")
             } catch (error) {
                 updateTips(tips, error);
             }
@@ -80,6 +83,7 @@ loadContacts = (instanceId) => {
 }
 
 loadGroups = (instanceId) => {
+    $("#groups_snd").html('<select id="groups_snd" multiple style="display: none;"></select>');
     var tips = $("#send_state");
     tips.html("<img src='assets/img/loader.gif' />");
     $.post("api/api.php?action=fetchAllGroupSelect", {
@@ -103,6 +107,8 @@ loadGroups = (instanceId) => {
                 });
 
                 $('#groups_snd').hide();
+
+                tips.html("")
             } catch (error) {
                 updateTips(tips, error);
             }

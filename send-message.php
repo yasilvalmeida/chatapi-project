@@ -61,11 +61,21 @@
                                                 <input  id="file_snd" class="form-control" type="file" accept="image/*,application/pdf,audio/ogg,video/*" /><br>
 
                                                 <hr>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <div id="contacts">
+                                                                <select id="contacts_snd" multiple style="display: none;"></select>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div id="groups">
+                                                                <select id="groups_snd" multiple style="display: none;"></select>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                                 
-                                                <select id="contacts_snd" multiple style="display: none;"></select>
-
-                                                <select id="groups_snd" multiple style="display: none;"></select>
-
                                                 <hr />
                                                 <div id="send_state" class="d-flex justify-content-center" role="alert">
                                                 </div>
