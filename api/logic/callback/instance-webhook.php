@@ -13,20 +13,14 @@
             $instance = $data["instanceId"];
             // Get status
             if ($ack) {
-                sleep(5);
                 $msgId  = $ack["id"];
                 $status = $ack["status"];
                 // Create the query
-                if ($status == "delivered") {
-                    $query = "
-                            call sp_update_delivered_status(".$msgId.");
-                            ";
-                }
-                if ($status == "viewed") {
-                    $query = "
-                            call sp_update_viewed_status(".$msgId.");
-                            ";
-                }
+                $query = '
+                        select id
+                        from tb_message
+                        where msgId = "'.$msgId.'";
+                        ';
                 // Create object to connect to MySQL using PDO
                 $mysqlPDO = new MySQLPDO();
                 // Prepare the query
@@ -36,21 +30,20 @@
                 // Get affect rows in associative array
                 $rows = $statement->fetch();
                 if ($rows) {
-                    // Return the nesting level of the output buffering mechanism
-                    if(ob_get_level() > 0) {
-                        // Flush (send) the output buffer and turn off output buffering
-                        ob_end_flush();
+                    // Update the status in MySQL Database
+                    $row = $rows[0];
+                    $id = $row["id"];
+                    // Create the query
+                    if ($status == "delivered") {
+                        $query = "
+                                call sp_update_delivered_status('".$msgId."');
+                                ";
                     }
-                    // Waiting 1 second
-                    sleep(1);
-                    $error = "Update new status ".$status." for ".$msgId." into MySQL";
-                    echo $error;
-                    // Error Query
-                    $query = 
-                            "
-                                insert into tb_error(error)
-                                values('".$error."');
-                            ";
+                    if ($status == "viewed") {
+                        $query = "
+                                call sp_update_viewed_status('".$msgId."');
+                                ";
+                    }
                     // Create object to connect to MySQL using PDO
                     $mysqlPDO = new MySQLPDO();
                     // Prepare the query
@@ -59,17 +52,65 @@
                     $statement->execute();
                     // Get affect rows in associative array
                     $rows = $statement->fetch();
+                    if ($rows) {
+                        // Return the nesting level of the output buffering mechanism
+                            if(ob_get_level() > 0) {
+                                // Flush (send) the output buffer and turn off output buffering
+                                ob_end_flush();
+                            }
+                            // Waiting 1 second
+                            sleep(1);
+                        $error = "Update new status ".$status." for ".$msgId." into MySQL";
+                        echo $error;
+                        // Create the query
+                        if ($status == "delivered") {
+                            $query = "
+                                    call sp_update_delivered_status('".$msgId."');
+                                    ";
+                        }
+                        if ($status == "viewed") {
+                            $query = "
+                                    call sp_update_viewed_status('".$msgId."');
+                                    ";
+                        }
+                        // Create object to connect to MySQL using PDO
+                        $mysqlPDO = new MySQLPDO();
+                        // Prepare the query
+                        $statement = $mysqlPDO->getConnection()->prepare($query);
+                        // Execute the query with parameters
+                        $statement->execute();
+                        // Get affect rows in associative array
+                        $rows = $statement->fetch();
 
+                    }
+                    else {
+                        $error = "Status ".$status." not updated!";
+                        echo $error;
+                        // Error Query
+                        $query = 
+                        "
+                            insert into tb_error(error)
+                            values('".$error."');
+                        ";
+                        // Create object to connect to MySQL using PDO
+                        $mysqlPDO = new MySQLPDO();
+                        // Prepare the query
+                        $statement = $mysqlPDO->getConnection()->prepare($query);
+                        // Execute the query with parameters
+                        $statement->execute();
+                        // Get affect rows in associative array
+                        $rows = $statement->fetch();
+                    }
                 }
                 else {
-                    $error = "Status ".$status." not updated!";
+                    $error = "Message not found!";
                     echo $error;
                     // Error Query
                     $query = 
-                    "
-                        insert into tb_error(error)
-                        values('".$error."');
-                    ";
+                            "
+                                insert into tb_error(error)
+                                values('".$error."');
+                            ";
                     // Create object to connect to MySQL using PDO
                     $mysqlPDO = new MySQLPDO();
                     // Prepare the query
