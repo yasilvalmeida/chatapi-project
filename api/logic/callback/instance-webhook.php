@@ -13,6 +13,7 @@
             $instance = $data["instanceId"];
             // Get status
             if ($ack) {
+                sleep(5);
                 $msgId  = $ack["id"];
                 $status = $ack["status"];
                 // Create the query
