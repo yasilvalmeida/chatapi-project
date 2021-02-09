@@ -44,6 +44,8 @@
                                 call sp_update_viewed_status(".$id.");
                                 ";
                     }
+                    // Create object to connect to MySQL using PDO
+                    $mysqlPDO = new MySQLPDO();
                     // Prepare the query
                     $statement = $mysqlPDO->getConnection()->prepare($query);
                     // Execute the query with parameters
@@ -56,6 +58,8 @@
                             // Flush (send) the output buffer and turn off output buffering
                             ob_end_flush();
                         }
+                        // Waiting 1 second
+                        sleep(1);
                         $error = "Update new status ".$status." for ".$msgId." into MySQL";
                         echo $error;
                         // Error Query
@@ -72,6 +76,7 @@
                         $statement->execute();
                         // Get affect rows in associative array
                         $rows = $statement->fetch();
+
                     }
                     else {
                         $error = "Status ".$status." not updated!";
@@ -170,7 +175,24 @@
                                 // Flush (send) the output buffer and turn off output buffering
                                 ob_end_flush();
                             }
-                            echo "Insert new message for ".$msgId." into MySQL";
+                            // Waiting 1 second
+                            sleep(1);
+                            $error = "Insert new message for ".$msgId." into MySQL";
+                            echo $error;
+                            // Error Query
+                            $query = 
+                                    "
+                                        insert into tb_error(error)
+                                        values('".$error."');
+                                    ";
+                            // Create object to connect to MySQL using PDO
+                            $mysqlPDO = new MySQLPDO();
+                            // Prepare the query
+                            $statement = $mysqlPDO->getConnection()->prepare($query);
+                            // Execute the query with parameters
+                            $statement->execute();
+                            // Get affect rows in associative array
+                            $rows = $statement->fetch();
                         }
                         else {
                             $error = "Message not inserted!";
