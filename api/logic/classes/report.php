@@ -19,7 +19,7 @@
         function __construct(array $data) {
             $this->id            = $data['id'];
             $this->msgId         = $data['msgId'];
-            $this->body          = $data['body'];
+            $this->body          = addslashes($data['body']);
             $this->type          = $data['type'];
             $this->senderName    = $data['senderName'];
             $this->fromMe        = $data['fromMe'] == 1? '<i class="fas fa-check" style="text-align: center; color:green;"></i>': '<i class="fas fa-times" style="color:red"></i>';
