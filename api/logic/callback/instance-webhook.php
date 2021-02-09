@@ -36,16 +36,12 @@
                     // Create the query
                     if ($status == "delivered") {
                         $query = "
-                                update tb_mssage
-                                set deliveredAt = now()
-                                where id = ".$id." or msgId = '".$msgId."'
+                                call sp_update_delivered_status('".$msgId."');
                                 ";
                     }
                     if ($status == "viewed") {
                         $query = "
-                                update tb_mssage
-                                set viewedAt = now()
-                                where id = ".$id." or msgId = '".$msgId."'
+                                call sp_update_viewed_status('".$msgId."');
                                 ";
                     }
                     // Create object to connect to MySQL using PDO
@@ -54,24 +50,31 @@
                     $statement = $mysqlPDO->getConnection()->prepare($query);
                     // Execute the query with parameters
                     $statement->execute();
+                    // Waiting 1 second
+                    sleep(1);
                     // Get affect rows in associative array
                     $rows = $statement->fetch();
                     if ($rows) {
                         // Return the nesting level of the output buffering mechanism
-                            if(ob_get_level() > 0) {
-                                // Flush (send) the output buffer and turn off output buffering
-                                ob_end_flush();
-                            }
-                            // Waiting 1 second
-                            sleep(1);
+                        if(ob_get_level() > 0) {
+                            // Flush (send) the output buffer and turn off output buffering
+                            ob_end_flush();
+                        }
+                        // Waiting 1 second
+                        sleep(1);
                         $error = "Update new status ".$status." for ".$msgId." into MySQL";
                         echo $error;
-                        // Error Query 
-                        $query = 
-                        "
-                            insert into tb_error(error)
-                            values('".$error."');
-                        ";
+                        // Create the query
+                        if ($status == "delivered") {
+                            $query = "
+                                    call sp_update_delivered_status('".$msgId."');
+                                    ";
+                        }
+                        if ($status == "viewed") {
+                            $query = "
+                                    call sp_update_viewed_status('".$msgId."');
+                                    ";
+                        }
                         // Create object to connect to MySQL using PDO
                         $mysqlPDO = new MySQLPDO();
                         // Prepare the query
