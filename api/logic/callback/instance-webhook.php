@@ -36,12 +36,16 @@
                     // Create the query
                     if ($status == "delivered") {
                         $query = "
-                                call sp_update_delivered_status('".$msgId."');
+                                update tb_mssage
+                                set deliveredAt = now()
+                                where id = ".$id." or msgId = '".$msgId."'
                                 ";
                     }
                     if ($status == "viewed") {
                         $query = "
-                                call sp_update_viewed_status('".$msgId."');
+                                update tb_mssage
+                                set viewedAt = now()
+                                where id = ".$id." or msgId = '".$msgId."'
                                 ";
                     }
                     // Create object to connect to MySQL using PDO
@@ -62,17 +66,12 @@
                             sleep(1);
                         $error = "Update new status ".$status." for ".$msgId." into MySQL";
                         echo $error;
-                        // Create the query
-                        if ($status == "delivered") {
-                            $query = "
-                                    call sp_update_delivered_status('".$msgId."');
-                                    ";
-                        }
-                        if ($status == "viewed") {
-                            $query = "
-                                    call sp_update_viewed_status('".$msgId."');
-                                    ";
-                        }
+                        // Error Query 
+                        $query = 
+                        "
+                            insert into tb_error(error)
+                            values('".$error."');
+                        ";
                         // Create object to connect to MySQL using PDO
                         $mysqlPDO = new MySQLPDO();
                         // Prepare the query
