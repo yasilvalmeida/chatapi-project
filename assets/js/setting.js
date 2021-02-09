@@ -76,37 +76,3 @@ loadSettings = () => {
         }
     });
 };
-
-function saveSettings() {
-    var tips = $("#setting_state"),
-        instance_token = $("#instance_snd option:selected").text().split(" - "),
-        instance = instance_token[0],
-        token = instance_token[1],
-        sendDelay = parseInt($("#sendDelay").val()),
-        ackNotificationsOn = $("#ackNotificationsOn:checked").is(":checked"),
-        instanceStatuses = $("#instanceStatuses:checked").is(":checked"),
-        webhookStatuses = $("#webhookStatuses:checked").is(':checked');
-    tips.addClass("alert-light");
-    tips.html("<img src='assets/img/loader.gif' />");
-    let data = {
-        "sendDelay": sendDelay,
-        "ackNotificationsOn": ackNotificationsOn,
-        "instanceStatuses": instanceStatuses,
-        "webhookStatuses": webhookStatuses
-    };
-    $.post(`https://eu53.chat-api.com/instance${instance}/settings?token=${token}`, data, 
-    (data, status) => {
-        console.log("first", data)
-        if (status == "success") {
-            try {
-                tips.html("Settings saved")
-                console.log(data)
-                $("#sendDelay").val(data.sendDelay != null? data.sendDelay: 0);
-            } catch (error) {
-                updateTips(tips, error);
-            }
-        } else {
-            updateTips(tips, data);
-        }
-    });
-}

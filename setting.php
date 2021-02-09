@@ -74,7 +74,6 @@
                                             </form>
                                         </div>
                                         <div class="card-footer">
-                                            <a class="btn btn-success" href="javascript:saveSettings()">Save</a>
                                         </div>
                                         <!-- /.card-body -->
                                     </div>
