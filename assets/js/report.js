@@ -69,9 +69,25 @@ loadMessage = () => {
     } 
 };
 
-view = (message) => {
-    let htmlContent = `<table><tr><td><b>Chat ID</b></td><td>${message.chatId}</td></tr><tr><td><b>Author</b></td><td>${message.author}</td></tr><tr><td><b>Sender Name</b></td><td>${message.senderName}</td></tr><tr><td><b>From Me</b></td><td><div style="text-align:left">${message.fromMe}</div></td></tr><tr><td><b>Body</b></td><td>${message.body}</td></tr><tr><td><b>Message Number</b></td><td>${message.messageNumber}</td></tr><tr><td><b>Sent At</b></td><td>${message.sentAt}</td></tr><tr><td><b>Delivered At</b></td><td>${message.deliveredAt}</td></tr><tr><td><b>Viewed At</b></td><td>${message.viewedAt}</td></tr></table>`;
+view = (id) => {
     $("#okModal").modal("show");
     $("#title_state").html("View Message");
-    $("#content_state").html(htmlContent);
+    var tips = $("#content_state");
+    tips.html("<img src='assets/img/loader.gif' />");
+    $.post("api/api.php?action=fetchSingleMessage", {
+        id
+    },
+    (data, status) => {
+        if (status == "success") {
+            try {
+                let message = JSON.parse(data).data[0];
+                let htmlContent = `<table><tr><td class="fitwidth"><b>Chat ID</b></td><td>${message.chatId}</td></tr><tr><td class="fitwidth"><b>Author</b></td><td>${message.author}</td></tr><tr><td class="fitwidth"><b>Sender Name</b></td><td>${message.senderName}</td></tr><tr><td class="fitwidth"><b>From Me</b></td><td><div style="text-align:left">${message.fromMe}</div></td></tr><tr><td class="fitwidth"><b>Body</b></td><td>${message.body}</td></tr><tr><td class="fitwidth"><b>Message Number</b></td><td>${message.messageNumber}</td></tr><tr><td class="fitwidth"><b>Sent At</b></td><td>${message.sentAt}</td></tr><tr><td class="fitwidth"><b>Delivered At</b></td><td>${message.deliveredAt}</td></tr><tr><td class="fitwidth"><b>Viewed At</b></td><td>${message.viewedAt}</td></tr></table>`;
+                tips.html(htmlContent);
+            } catch (error) {
+                updateTips(tips, error);
+            }
+        } else {
+            updateTips(tips, data);
+        }
+    });
 }

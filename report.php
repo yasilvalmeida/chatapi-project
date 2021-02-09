@@ -13,7 +13,7 @@
         <?php
             require("cmp/head.php");
         ?>
-        <link rel="stylesheet" href="assets/css/multi-select.css" />
+        <link rel="stylesheet" href="assets/css/table-width.css" />
     </head>
 
     <body id="page-top">

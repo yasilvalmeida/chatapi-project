@@ -22,6 +22,7 @@ loadInstances = () => {
                 let html = "";
                 const instances = JSON.parse(data);
                 instances.map((instance, i) => {
+                    //console.log(instance)
                     html += '<option value="' + instance.id + '">' + instance.instance + ' - ' + instance.token + '</option>';
                 });
                 $("#instance_snd").html(html);
@@ -41,47 +42,21 @@ loadInstances = () => {
 
 loadSettings = () => {
     var tips = $("#setting_state"),
-        instance_token = $("#instance_snd").text().split(" - "),
+        instance_token = $("#instance_snd option:selected").text().split(" - "),
         instance = instance_token[0],
         token = instance_token[1]; 
     tips.addClass("alert-light");
     tips.html("<img src='assets/img/loader.gif' />");
-    /* $.get(`https://eu53.chat-api.com/instance${instance}/settings?token=${token}`, {}, 
-    (data, status) => {
-        console.log("here");
-        try {
-            if (status == "success") {
-                try {
-                    tips.html("Settings loaded")
-                    console.log(data)
-                    $("#ackNotificationsOn").prop('checked', data.ackNotificationsOn);
-                    $("#instanceStatuses").prop('checked', data.instanceStatuses);
-                    $("#webhookStatuses").prop('checked', data.webhookStatuses);
-                    $("#sendDelay").val(data.sendDelay != null? data.sendDelay: 0);
-                    $("#webhookUrl").val(data.webhookUrl != null? data.webhookUrl: "")
-                } catch (error) {
-                    updateTips(tips, error);
-                }
-            } else {
-                updateTips(tips, data);
-            }
-        }
-        catch(exception) {
-            console.log(data, status, exception);
-            updateTips(tips, exception);
-            tips.html("")
-        }
-    }); */
     $.ajax({
         url: `https://eu53.chat-api.com/instance${instance}/settings?token=${token}`,
         data: {},
         complete: function(xhr, statusText){
             if (xhr.status == 200) {
                 // Success
-                console.log(xhr)
                 try {
                     tips.html("Settings loaded")
-                    console.log(data)
+                    let data = xhr.responseJSON;
+                    //console.log(data)
                     $("#ackNotificationsOn").prop('checked', data.ackNotificationsOn);
                     $("#instanceStatuses").prop('checked', data.instanceStatuses);
                     $("#webhookStatuses").prop('checked', data.webhookStatuses);
@@ -104,7 +79,7 @@ loadSettings = () => {
 
 function saveSettings() {
     var tips = $("#setting_state"),
-        instance_token = $("#instance_snd").text().split(" - "),
+        instance_token = $("#instance_snd option:selected").text().split(" - "),
         instance = instance_token[0],
         token = instance_token[1],
         sendDelay = parseInt($("#sendDelay").val()),

@@ -228,6 +228,9 @@
         else if ($_GET["action"] == 'fetchAllMessage') {
             $data = $reportAPI->fetchAllMessage();
         }
+        else if ($_GET["action"] == 'fetchSingleMessage') {
+            $data = $reportAPI->fetchSingleMessage();
+        }
         /* Report Action End */
 
         // No action to perform
