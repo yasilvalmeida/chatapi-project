@@ -43,8 +43,8 @@
                                                     <table id="dataTable" class="table table-striped table-bordered table-hover display">
                                                         <thead>
                                                             <tr>
-                                                                <th>Sender Name</th>
                                                                 <th>Author</th>
+                                                                <th>Chat ID</th>
                                                                 <th>From Me</th>
                                                                 <th>Sent At</th>
                                                                 <th>Delivered At</th>

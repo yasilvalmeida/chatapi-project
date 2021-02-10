@@ -35,7 +35,7 @@
                         //Create datatable row
                         $tmp_data[] = array(
                             $message->SenderName(),
-                            $message->Author(),
+                            $message->ChatID(),
                             '<div style="text-align:center">'.$message->FromMe().'</div>',
                             $message->SentAt(),
                             $message->DeliveredAt(),
