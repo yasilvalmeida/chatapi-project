@@ -83,7 +83,8 @@ loadContacts = (instanceId) => {
 }
 
 loadGroups = (instanceId) => {
-    $("#groups_snd").html('<select id="groups_snd" multiple style="display: none;"></select>');
+    console.log(instanceId)
+    $("#groups").html('<select id="groups_snd" multiple style="display: none;"></select>');
     var tips = $("#send_state");
     tips.html("<img src='assets/img/loader.gif' />");
     $.post("api/api.php?action=fetchAllGroupSelect", {
@@ -99,7 +100,6 @@ loadGroups = (instanceId) => {
                     html += '<option value="' + group.chat_id + '">' + group.name + '</option>';
                 });
                 $("#groups_snd").html(html);
-
                 $('#groups_snd').multiselect({
                     nonSelectedText: 'Select groups...',
                     includeSelectAllOption: true,
